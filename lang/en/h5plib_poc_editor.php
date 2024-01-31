@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Poc Editor';
 $string['test'] = 'test';
-$string['creationtitle'] = 'Create a new course';
+$string['creationtitle'] = 'Create a new presentation';
 $string['presentationtitle'] = 'Presentation title';
 $string['coursechoice'] = 'Link to course';
 $string['selectcoursetext'] = 'Select a course...';
