@@ -73,6 +73,7 @@ if ($data = $createcourseform->get_data()) {
         $newmodule->metadata = "";
         $newmodule->intro = "";
         $newmodule->cmidnumber = 0;
+        $newmodule->h5paction = 'create';
 
         $result = add_moduleinfo($newmodule, $course);
 
@@ -81,8 +82,10 @@ if ($data = $createcourseform->get_data()) {
             $savepresensation->userid = $USER->id;
             $savepresensation->presentationid = $result->instance;
 
-            $DB->insert_record('h5plib_poc_editor', $savepresensation);
+            $DB->insert_record('h5plib_poc_editor_pres  ', $savepresensation);
         }
+
+        redirect(new moodle_url('/h5p/h5plib/poc_editor'), 'Presentation created successfully', null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
 
