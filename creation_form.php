@@ -76,7 +76,13 @@ if ($data = $createcourseform->get_data()) {
 
         $result = add_moduleinfo($newmodule, $course);
 
+        if ($result->instance) {
+            $savepresensation = new stdClass();
+            $savepresensation->userid = $USER->id;
+            $savepresensation->presentationid = $result->instance;
 
+            $DB->insert_record('h5plib_poc_editor', $savepresensation);
+        }
     }
 }
 

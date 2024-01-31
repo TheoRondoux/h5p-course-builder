@@ -26,14 +26,14 @@ $context = context_system::instance();
 $PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/h5p/h5plib/poc_editor/index.php'));
 $PAGE->set_pagelayout('standard');
-$PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->full_name);
+$PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('pluginname', 'h5plib_poc_editor'));
 
+$userpresentations = $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = '.$USER->id.')');
+
 echo $OUTPUT->header();
-$presentations = $DB->get_records('hvp');
 
-echo $OUTPUT->box_start('card-columns');
-
+echo html_writer::start_tag('div', ['class' => 'new-pres']);
 echo html_writer::start_tag('div', ['class' => 'card']);
 echo html_writer::start_tag('div', ['class' => 'card-body']);
 echo html_writer::start_tag('center', ['class' => 'card-center']);
@@ -42,17 +42,30 @@ echo '<a href="creation_form.php"> + </a>';
 echo html_writer::end_tag('center');
 echo html_writer::end_tag('div');
 echo html_writer::end_tag('div');
+echo html_writer::end_tag('div');
 
-foreach ($presentations as $p) {
-    echo html_writer::start_tag('div', ['class' => 'card']);
-    echo html_writer::start_tag('div', ['class' => 'card-body']);
-    echo html_writer::tag('p', $p->name, ['class' => 'card-text']);
-    echo html_writer::start_tag('p', ['class' => 'card-text']);
-    echo html_writer::tag('small', userdate($p->timecreated), ['class' => 'text-muted']);
-    echo html_writer::end_tag('p');
+echo html_writer::tag('h3', 'My presentations');
+
+if ($userpresentations) {
+    echo $OUTPUT->box_start('card-columns');
+    echo html_writer::start_tag('div', ['class' => 'user-pres']);
+    foreach ($userpresentations as $p) {
+        echo html_writer::start_tag('div', ['class' => 'card']);
+        echo html_writer::start_tag('div', ['class' => 'card-body']);
+        echo html_writer::tag('p', $p->name, ['class' => 'card-text']);
+        echo html_writer::start_tag('p', ['class' => 'card-text']);
+        echo html_writer::tag('small', userdate($p->timecreated), ['class' => 'text-muted']);
+        echo html_writer::end_tag('p');
+        echo html_writer::end_tag('div');
+        echo html_writer::end_tag('div');
+    }
     echo html_writer::end_tag('div');
-    echo html_writer::end_tag('div');
+    echo $OUTPUT->box_end();
 }
-echo $OUTPUT->box_end();
+else {
+    echo html_writer::start_tag('center');
+    echo html_writer::tag('p', 'No presentations created yet');
+    echo html_writer::end_tag('center');
+}
 
 echo $OUTPUT->footer();
