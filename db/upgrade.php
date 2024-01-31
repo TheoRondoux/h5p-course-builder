@@ -54,6 +54,18 @@ function xmldb_h5plib_poc_editor_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2024013101, 'h5plib', 'poc_editor');
     }
 
+    if ($oldversion < 2024013102) {
+
+        // Define table h5plib_poc_editor to be renamed to h5plib_poc_editor_pres.
+        $table = new xmldb_table('h5plib_poc_editor');
+
+        // Launch rename table for h5plib_poc_editor_pres.
+        $dbman->rename_table($table, 'h5plib_poc_editor_pres');
+
+        // Poc_editor savepoint reached.
+        upgrade_plugin_savepoint(true, 2024013102, 'h5plib', 'poc_editor');
+    }
+
 
     return true;
 }
