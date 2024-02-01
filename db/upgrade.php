@@ -66,6 +66,29 @@ function xmldb_h5plib_poc_editor_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2024013102, 'h5plib', 'poc_editor');
     }
 
+    if ($oldversion < 2024020101) {
+
+        // Define field presentationid to be added to h5plib_poc_editor_template.
+        $table = new xmldb_table('h5plib_poc_editor_template');
+        $field = new xmldb_field('presentationid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'id');
+
+        // Conditionally launch add field presentationid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('json_content', XMLDB_TYPE_TEXT, null, null, null, null, null, 'presentationid');
+
+        // Conditionally launch add field json_content.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Poc_editor savepoint reached.
+        upgrade_plugin_savepoint(true, 2024020101, 'h5plib', 'poc_editor');
+    }
+
+
 
     return true;
 }
