@@ -62,10 +62,16 @@ if ($data = $configform->get_data()){
     $newcourse->visible = 0;
 
     $createdcourse = create_course($newcourse);
+    redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Poc Editor course added successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+}
+
+if ($data = $addtemplateform->get_data()) {
+
 }
 
 echo $OUTPUT->header();
+echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
 $configform->display();
 $addtemplateform->display();
-echo $debugvar;
+print_r($debugvar);
 echo $OUTPUT->footer();

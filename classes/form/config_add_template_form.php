@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
 class config_add_template_form extends \moodleform {
     public function definition() {
@@ -33,5 +34,19 @@ class config_add_template_form extends \moodleform {
 
         $mform->addElement('html', '<h3>Add a template</h3>');
 
+        $templatecourseid = h5p_poc_editor_get_template_course()->id;
+        $addedtemplates = h5p_poc_editor_get_added_templates(); 
+        $availabletemplates = h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid);
+        if (count($availabletemplates) > 0) {
+            $availabletemplatesnames = [];
+            foreach ($availabletemplates as $availabletemplate) {
+                array_push($availabletemplatesnames, $availabletemplate->name);
+            }
+            $mform->addElement('select', 'available_templates', 'Available templates', $availabletemplatesnames);
+            $mform->addElement('submit', 'submit_add_template', 'Add selected template');
+        }
+        else {
+            $mform->addElement('html', '<center><p>No new templates to add. Everything\'s clear!</p></center>');
+        }
     }
 }

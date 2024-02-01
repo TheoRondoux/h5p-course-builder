@@ -43,3 +43,41 @@ function h5p_poc_editor_generate_slug($title) {
     $slug = str_replace([' ', '(', ')', 'é', 'è', 'à', 'ç', 'ù'], ['-', '', '', 'e', 'e', 'a', 'c', 'u'], $title);
     return $slug;
 }
+
+function h5p_poc_editor_get_template_course() {
+    global $DB;
+    $templatecourse = $DB->get_record('course', ['shortname' => 'poceditor']);
+    return $templatecourse;
+}
+
+function h5p_poc_editor_get_added_templates() {
+    global $DB;
+    $addedtemplates = $DB->get_records('h5plib_poc_editor_template');
+    return $addedtemplates;
+}
+
+function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid) {
+    global $DB;
+    $availabletemplates = [];
+    $importedtemplates = $DB->get_records('hvp', ['course' => $templatecourseid]);
+    if ($addedtemplates) {
+        foreach ($importedtemplates as $importedtemplate) {
+            $added = false;
+            foreach ($addedtemplates as $addedtemplate) {
+                if ($addedtemplate->presentationid == $importedtemplate->id) {
+                    $added = true;
+                }
+            }
+            if (!$added) {
+                array_push($availabletemplates, $importedtemplate);
+            }
+        }
+        return $availabletemplates;
+    }
+    return $importedtemplates;
+}
+
+function h5p_poc_editor_get_updatable_templates() {
+    global $DB;
+    return null;
+}
