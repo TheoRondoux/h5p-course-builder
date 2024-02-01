@@ -91,6 +91,7 @@ if ($data = $createcourseform->get_data()) {
 
 
 echo $OUTPUT->header();
+echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
 $createcourseform->display();
 print_r($debugprint);
 echo $OUTPUT->footer();

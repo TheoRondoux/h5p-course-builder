@@ -34,6 +34,10 @@ $userpresentations = $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SE
 
 echo $OUTPUT->header();
 
+if (is_siteadmin()) {
+    echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/configuration.php')."'>[Settings]</a>";
+}
+
 echo html_writer::start_tag('div', ['class' => 'new-pres']);
 echo html_writer::start_tag('div', ['class' => 'card']);
 echo html_writer::start_tag('div', ['class' => 'card-body']);
@@ -51,9 +55,12 @@ if ($userpresentations) {
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
     foreach ($userpresentations as $p) {
+        $moduleid = $DB->get_record('course_modules', ['instance' => $p->id])->id;
+        $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $p->name . '</a>';
+        $courseediturl = '<a href="'.new moodle_url("/course/modedit.php?update=".$moduleid."&return=1").'">[Edit]</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $p->name, ['class' => 'card-text']);
+        echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
         echo html_writer::start_tag('p', ['class' => 'card-text']);
         echo html_writer::tag('small', userdate($p->timecreated), ['class' => 'text-muted']);
         echo html_writer::end_tag('p');
