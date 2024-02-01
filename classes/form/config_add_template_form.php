@@ -15,22 +15,23 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
- *
  * @package     h5plib_poc_editor
- * @category    string
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+*/
+
+namespace h5plib_poc_editor\form;
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Poc Editor';
-$string['test'] = 'test';
-$string['creationtitle'] = 'Create a new presentation';
-$string['presentationtitle'] = 'Presentation title';
-$string['coursechoice'] = 'Link to course';
-$string['selectcoursetext'] = 'Select a course...';
-$string['requieredpresentationtitle'] = 'Please enter a title for your presentation';
-$string['requieredcoursechoice'] = 'Please chose a course to link you presentation with.';
-$string['configtitle'] = "Poc Editor Settings";
+require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/config.php');
+
+class config_add_template_form extends \moodleform {
+    public function definition() {
+        $mform = $this->_form;
+
+        $mform->addElement('html', '<h3>Add a template</h3>');
+
+    }
+}
