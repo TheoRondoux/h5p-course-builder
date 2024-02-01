@@ -24,6 +24,7 @@ require_once('../../../config.php');
 require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once('./lib.php');
+require_login();
 
 $context = context_system::instance();
 $PAGE->set_context($context);
@@ -31,6 +32,10 @@ $PAGE->set_url(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'));
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('configtitle', 'h5plib_poc_editor'));
+
+if (!is_siteadmin()) {
+    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), 'Unable to access to the plugin\'s settings page. You need to be a site administrator.', null, \core\output\notification::NOTIFY_ERROR);
+}
 
 $debugvar = "";
 

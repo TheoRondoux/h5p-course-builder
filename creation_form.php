@@ -23,7 +23,7 @@
 require_once('../../../config.php');
 require_once($CFG->dirroot. '/h5p/h5plib/poc_editor/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
-
+require_login();
 
 $context = context_system::instance();
 $PAGE->set_context($context);
