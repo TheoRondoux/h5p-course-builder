@@ -23,6 +23,7 @@
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot.'/course/lib.php');
+require_once('./lib.php');
 
 $context = context_system::instance();
 $PAGE->set_context($context);
@@ -67,6 +68,21 @@ if ($data = $configform->get_data()){
 
 if ($data = $addtemplateform->get_data()) {
 
+    if (isset($data->available_templates)) {
+        $templateindex = $data->available_templates;
+        $templatecourseid = h5p_poc_editor_get_template_course()->id;
+        $addedtemplates = h5p_poc_editor_get_added_templates(); 
+        $availabletemplates = h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid);
+        
+        $chosentemplate = $availabletemplates[$templateindex];
+        
+        $newtemplate = new stdClass();
+        $newtemplate->presentationid = $chosentemplate->id;
+        $newtemplate->json_content = $chosentemplate->json_content;
+
+        $DB->insert_record('h5plib_poc_editor_template', $newtemplate);
+        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Template added successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+    }
 }
 
 echo $OUTPUT->header();

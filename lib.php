@@ -72,9 +72,14 @@ function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourse
                 array_push($availabletemplates, $importedtemplate);
             }
         }
-        return $availabletemplates;
     }
-    return $importedtemplates;
+    else {
+        foreach ($importedtemplates as $importedtemplate) {
+            array_push($availabletemplates, $importedtemplate);
+        }
+    }
+
+    return $availabletemplates;
 }
 
 function h5p_poc_editor_get_updatable_templates() {
