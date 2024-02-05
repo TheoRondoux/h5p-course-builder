@@ -29,6 +29,8 @@ require_once($CFG->dirroot. '/h5p/h5plib/poc_editor/lib.php');
 
 class course_creation_form extends \moodleform {
     public function definition() {
+        global $DB;
+
         $ccform = $this->_form;
 
         $ccform->addElement('text', 'presentation_title', get_string('presentationtitle', 'h5plib_poc_editor'));
@@ -59,6 +61,24 @@ class course_creation_form extends \moodleform {
         // One way: using an attribute directly in the element and not the rule like so:
         // $form->addElement('select', 'iselTest', 'Test Select:', $arrayOfOptions, array('onchange' => 'javascript:myFunctionToDoSomething();')); 
 
-        $ccform->addElement('submit', 'createpresentationsubmitbutton', get_string('savechanges'));
+        $rowtemplates = h5p_poc_editor_get_added_templates();
+        $templatesnames = [];
+        foreach ($rowtemplates as $template) {
+            $templaterecord = $DB->get_record('hvp', ['id' => $template->presentationid]);
+            if (!empty($templaterecord)) {
+                array_push($templatesnames, $templaterecord->name);
+            }
+        }
+
+        $ccform->addElement('select', 'template_select', get_string('selecttemplate', 'h5plib_poc_editor'),$templatesnames);
+        $ccform->addRule(
+            'template_select',
+            get_string('requiredtemplatechoice', 'h5plib_poc_editor'),
+            'required',
+            '',
+            'client'
+        );
+
+        $ccform->addElement('submit', 'createpresentationsubmitbutton', get_string('createpresentation', 'h5plib_poc_editor'));
     }
 }
