@@ -88,7 +88,31 @@ function xmldb_h5plib_poc_editor_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2024020101, 'h5plib', 'poc_editor');
     }
 
+    if ($oldversion < 2024020501) {
 
+        // Define field timecreated to be added to h5plib_poc_editor_template.
+        $table = new xmldb_table('h5plib_poc_editor_template');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '20', null, null, null, null, 'json_content');
+
+        // Conditionally launch add field timecreated.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field timemodified to be added to h5plib_poc_editor_template.
+        $table = new xmldb_table('h5plib_poc_editor_template');
+        $field = new xmldb_field('timemodified', XMLDB_TYPE_INTEGER, '20', null, null, null, null, 'timecreated');
+
+        // Conditionally launch add field timemodified.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Poc_editor savepoint reached.
+        upgrade_plugin_savepoint(true, 2024020501, 'h5plib', 'poc_editor');
+
+
+    }
 
     return true;
 }

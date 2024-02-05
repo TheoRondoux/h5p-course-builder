@@ -86,3 +86,23 @@ function h5p_poc_editor_get_updatable_templates() {
     global $DB;
     return null;
 }
+
+function h5p_poc_editor_find_template($index) {
+    global $DB;
+    $templateinfos = new stdClass();
+    
+    $templates = $DB->get_records('h5plib_poc_editor_template');
+    $retrieved_selected_template = $templates[($index + 1)];
+
+    $retrieved_hvp_template = $DB->get_record('hvp', ['id' => $retrieved_selected_template->presentationid]);
+    
+    $templateinfos->json_content = $retrieved_hvp_template->json_content;
+    
+    $templatelib = $DB->get_record('hvp_libraries', ['id' => $retrieved_hvp_template->main_library_id]);
+    
+    $templatelibdesc = $templatelib->machine_name . ' ' . $templatelib->major_version . '.' . $templatelib->minor_version;
+    
+    $templateinfos->library = $templatelibdesc;
+    
+    return $templateinfos;
+}
