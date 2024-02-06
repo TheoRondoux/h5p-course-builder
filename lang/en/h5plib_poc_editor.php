@@ -47,3 +47,6 @@ $string['updatetemplatestitle'] = 'Update templates';
 $string['updatabletemplatelisttitle'] = 'The following templates can be updated';
 $string['updatenow'] = 'Update now';
 $string['nothingtoupdate'] = 'Nothing to update for the moment';
+$string['deletetemplatetitle'] = 'Delete a template';
+$string['notemplatetodelete'] = 'No templates  to delete.';
+$string['deletetemplate'] = 'Delete template';

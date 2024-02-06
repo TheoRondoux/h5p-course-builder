@@ -62,13 +62,7 @@ class course_creation_form extends \moodleform {
         // $form->addElement('select', 'iselTest', 'Test Select:', $arrayOfOptions, array('onchange' => 'javascript:myFunctionToDoSomething();')); 
 
         $rowtemplates = h5p_poc_editor_get_added_templates();
-        $templatesnames = [];
-        foreach ($rowtemplates as $template) {
-            $templaterecord = $DB->get_record('hvp', ['id' => $template->presentationid]);
-            if (!empty($templaterecord)) {
-                array_push($templatesnames, $templaterecord->name);
-            }
-        }
+        $templatesnames = h5p_poc_editor_get_templates_names($rowtemplates);
 
         $ccform->addElement('select', 'template_select', get_string('selecttemplate', 'h5plib_poc_editor'),$templatesnames);
         $ccform->addRule(

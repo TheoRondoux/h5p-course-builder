@@ -42,6 +42,7 @@ $debugvar = "";
 $configform = new \h5plib_poc_editor\form\config_form();
 $addtemplateform = new \h5plib_poc_editor\form\config_add_template_form();
 $updatetemplateform = new \h5plib_poc_editor\form\config_update_template_form();
+$deletetemplateform = new \h5plib_poc_editor\form\config_delete_template_form();
 
 if ($data = $configform->get_data()){
 
@@ -99,11 +100,21 @@ if ($data = $updatetemplateform->get_data()) {
     }
 }
 
+if ($data = $deletetemplateform->get_data()) {
+    if (isset($data->select_delete_template)) {
+        $selectedtemplateindex = $data->select_delete_template;
+        $selectedtemplate = h5p_poc_editor_find_template($selectedtemplateindex);
+        $DB->delete_records('h5plib_poc_editor_template', ['id' => $selectedtemplate->id]);
+        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Template deleted successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+    }
+}
+
 echo $OUTPUT->header();
 echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
 $configform->display();
 echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
 $addtemplateform->display();
 $updatetemplateform->display();
+$deletetemplateform->display();
 print_r($debugvar);
 echo $OUTPUT->footer();

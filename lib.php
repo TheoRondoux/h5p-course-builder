@@ -109,6 +109,7 @@ function h5p_poc_editor_find_template($index) {
     $templatelibdesc = $templatelib->machine_name . ' ' . $templatelib->major_version . '.' . $templatelib->minor_version;
     
     $templateinfos->library = $templatelibdesc;
+    $templateinfos->id = $retrieved_selected_template->id;
     
     return $templateinfos;
 }
@@ -131,4 +132,17 @@ function h5p_poc_editor_update_templates($templates) {
         }
         return true;
     }
+}
+
+function h5p_poc_editor_get_templates_names($templates) {
+    global $DB;
+    $names = [];
+    foreach ($templates as $template) {
+        $templaterecord = $DB->get_record('hvp', ['id' => $template->presentationid]);
+        if (!empty($templaterecord)) {
+            array_push($names, $templaterecord->name);
+        }
+    }
+
+    return $names;
 }
