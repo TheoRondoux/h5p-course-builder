@@ -84,7 +84,8 @@ function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourse
 
 function h5p_poc_editor_get_updatable_templates() {
     global $DB;
-    return null;
+    $updatabletemplates = $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified != mdl_hvp.timemodified)');
+    return $updatabletemplates;
 }
 
 function h5p_poc_editor_find_template($index) {
@@ -105,4 +106,24 @@ function h5p_poc_editor_find_template($index) {
     $templateinfos->library = $templatelibdesc;
     
     return $templateinfos;
+}
+
+function h5p_poc_editor_update_templates($templates) {
+    global $DB;
+    if (!empty($templates)) {
+        foreach ($templates as $template) {
+            $templateid = $DB->get_record_sql("SELECT id FROM mdl_h5plib_poc_editor_template WHERE presentationid = ". $template->id);
+            
+            $dataToUpdate = new stdClass();
+            $dataToUpdate->id = $templateid->id;
+            $dataToUpdate->json_content = $template->json_content;
+            $dataToUpdate->timemodified = $template->timemodified;
+            
+            $success = $DB->update_record('h5plib_poc_editor_template', $dataToUpdate);
+            if (!$success) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

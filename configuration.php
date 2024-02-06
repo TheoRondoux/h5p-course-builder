@@ -41,6 +41,7 @@ $debugvar = "";
 
 $configform = new \h5plib_poc_editor\form\config_form();
 $addtemplateform = new \h5plib_poc_editor\form\config_add_template_form();
+$updatetemplateform = new \h5plib_poc_editor\form\config_update_template_form();
 
 if ($data = $configform->get_data()){
 
@@ -90,9 +91,19 @@ if ($data = $addtemplateform->get_data()) {
     }
 }
 
+if ($data = $updatetemplateform->get_data()) {
+    $templates = h5p_poc_editor_get_updatable_templates();
+    $issuccess = h5p_poc_editor_update_templates($templates);
+    if ($issuccess) {
+        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Templates updated successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+    }
+}
+
 echo $OUTPUT->header();
 echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
 $configform->display();
+echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
 $addtemplateform->display();
+$updatetemplateform->display();
 print_r($debugvar);
 echo $OUTPUT->footer();

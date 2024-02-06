@@ -28,25 +28,24 @@ require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
-class config_add_template_form extends \moodleform {
+class config_update_template_form extends \moodleform {
     public function definition() {
         $mform = $this->_form;
 
-        $mform->addElement('html', '<h4>' . get_string('addtemplate', 'h5plib_poc_editor') . '</h4>');
-
-        $templatecourseid = h5p_poc_editor_get_template_course()->id;
-        $addedtemplates = h5p_poc_editor_get_added_templates(); 
-        $availabletemplates = h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid);
-        if (count($availabletemplates) > 0) {
-            $availabletemplatesnames = [];
-            foreach ($availabletemplates as $availabletemplate) {
-                array_push($availabletemplatesnames, $availabletemplate->name);
+        $mform->addElement('html','<h4>' . get_string('updatetemplatestitle', 'h5plib_poc_editor') . '</h4>');
+        $updatabletemplates = h5p_poc_editor_get_updatable_templates();
+        if (!empty($updatabletemplates)) {
+            $mform->addElement('html','<center><p>' . get_string('updatabletemplatelisttitle', 'h5plib_poc_editor') . '</p></center>');
+            $mform->addElement('html','<ul>');
+            foreach ($updatabletemplates as $template) {
+                $mform->addElement('html','<li>' . $template->name . '</li>');
             }
-            $mform->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'), $availabletemplatesnames);
-            $mform->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'));
+            $mform->addElement('html','</ul>');
+    
+            $mform->addElement('submit', 'update_templates', get_string('updatenow', 'h5plib_poc_editor'));
         }
         else {
-            $mform->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
+            $mform->addElement('html','<center><p>' . get_string('nothingtoupdate', 'h5plib_poc_editor') . '</p></center>');
         }
     }
 }
