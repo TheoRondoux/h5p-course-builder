@@ -34,19 +34,23 @@ class config_add_template_form extends \moodleform {
 
         $mform->addElement('html', '<h4>' . get_string('addtemplate', 'h5plib_poc_editor') . '</h4>');
 
-        $templatecourseid = h5p_poc_editor_get_template_course()->id;
-        $addedtemplates = h5p_poc_editor_get_added_templates(); 
-        $availabletemplates = h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid);
-        if (count($availabletemplates) > 0) {
-            $availabletemplatesnames = [];
-            foreach ($availabletemplates as $availabletemplate) {
-                array_push($availabletemplatesnames, $availabletemplate->name);
+        $templatecourse = h5p_poc_editor_get_template_course();
+        if (!empty($templatecourse->id)) {
+            $templatecourseid = $templatecourse->id;
+            $addedtemplates = h5p_poc_editor_get_added_templates(); 
+            $availabletemplates = h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid);
+            if (count($availabletemplates) > 0) {
+                $availabletemplatesnames = [];
+                foreach ($availabletemplates as $availabletemplate) {
+                    array_push($availabletemplatesnames, $availabletemplate->name);
+                }
+                $mform->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'), $availabletemplatesnames);
+                $mform->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'));
             }
-            $mform->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'), $availabletemplatesnames);
-            $mform->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'));
+            else {
+                $mform->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
+            }
         }
-        else {
-            $mform->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
-        }
+
     }
 }
