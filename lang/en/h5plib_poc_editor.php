@@ -37,3 +37,16 @@ $string['createpresentation'] = "Create presentation";
 $string['configtitle'] = "Poc Editor Settings";
 $string['selecttemplate'] = 'Chose a template';
 $string['requiredtemplatechoice'] = 'Please chose a template to use for your presentation.';
+
+$string['templatemanagementtitle'] = "Templates management";
+$string['addtemplate'] = "Add a template";
+$string['nonewtemplates'] = 'No new templates to add. Everything\'s clear!';
+$string['addselectedtemplate'] = 'Add selected template';
+$string['availabletemplates'] = 'Available templates';
+$string['updatetemplatestitle'] = 'Update templates';
+$string['updatabletemplatelisttitle'] = 'The following templates can be updated';
+$string['updatenow'] = 'Update now';
+$string['nothingtoupdate'] = 'Nothing to update for the moment';
+$string['deletetemplatetitle'] = 'Delete a template';
+$string['notemplatetodelete'] = 'No templates  to delete.';
+$string['deletetemplate'] = 'Delete template';

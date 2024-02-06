@@ -32,7 +32,7 @@ class config_add_template_form extends \moodleform {
     public function definition() {
         $mform = $this->_form;
 
-        $mform->addElement('html', '<h3>Add a template</h3>');
+        $mform->addElement('html', '<h4>' . get_string('addtemplate', 'h5plib_poc_editor') . '</h4>');
 
         $templatecourseid = h5p_poc_editor_get_template_course()->id;
         $addedtemplates = h5p_poc_editor_get_added_templates(); 
@@ -42,11 +42,11 @@ class config_add_template_form extends \moodleform {
             foreach ($availabletemplates as $availabletemplate) {
                 array_push($availabletemplatesnames, $availabletemplate->name);
             }
-            $mform->addElement('select', 'available_templates', 'Available templates', $availabletemplatesnames);
-            $mform->addElement('submit', 'submit_add_template', 'Add selected template');
+            $mform->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'), $availabletemplatesnames);
+            $mform->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'));
         }
         else {
-            $mform->addElement('html', '<center><p>No new templates to add. Everything\'s clear!</p></center>');
+            $mform->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
         }
     }
 }

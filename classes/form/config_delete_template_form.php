@@ -26,21 +26,24 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
-class config_form extends \moodleform {
+class config_delete_template_form extends \moodleform {
     public function definition() {
-        global $DB;
         $mform = $this->_form;
 
-        $mform->addElement('html', '<h3>General configuration</h3>');
-        
-        $templatecourse = $DB->get_record('course', ['shortname' => 'poceditor']);
-        if (!$templatecourse) {
-            $mform->addElement('html', '<center><p>No template course found, do you want to create one?</p></center>');
-            $mform->addElement('submit', 'create_editor_template_course', 'Create course');
+        $mform->addElement('html', '<h4>' . get_string('deletetemplatetitle', 'h5plib_poc_editor') . '</h4>');
+
+        $templates = h5p_poc_editor_get_added_templates();
+        if (empty($templates)) {
+            $mform->addElement('html', '<center><p>' . get_string('notemplatetodelete', 'h5plib_poc_editor') . '</p></center>');
         } 
         else {
-            $mform->addElement('html', '<center><p>Template course already created, you can click <a href="'. (new \moodle_url("/course/view.php?id=".$templatecourse->id)).'">here</a> to access it</p></center>');
+            $templatesnames = h5p_poc_editor_get_templates_names($templates);
+            $mform->addElement('select', 'select_delete_template', get_string('selecttemplate', 'h5plib_poc_editor'), $templatesnames);
+            
+            $mform->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'));
         }
+                
     }
 }
