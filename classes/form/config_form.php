@@ -40,7 +40,7 @@ class config_form extends \moodleform {
             $mform->addElement('submit', 'create_editor_template_course', 'Create course');
         } 
         else {
-            $mform->addElement('html', '<center><p>Template course already created, you can click <a href="'. (new \moodle_url("/course/view.php?id=".$templatecourse->id)).'">here</a> to go to it</p></center>');
+            $mform->addElement('html', '<center><p>Template course already created, you can click <a href="'. (new \moodle_url("/course/view.php?id=".$templatecourse->id)).'">here</a> to access it</p></center>');
         }
     }
 }

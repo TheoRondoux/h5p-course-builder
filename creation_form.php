@@ -49,7 +49,7 @@ if ($data = $createcourseform->get_data()) {
 
         $template = h5p_poc_editor_find_template($selected_template_index);
 
-        $debugprint = $template;
+        $debugprint = $selected_template_index;
 
         $newmodule = new stdClass();
         $newmodule->module = 24;

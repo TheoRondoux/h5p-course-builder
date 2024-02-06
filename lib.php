@@ -92,8 +92,13 @@ function h5p_poc_editor_find_template($index) {
     global $DB;
     $templateinfos = new stdClass();
     
-    $templates = $DB->get_records('h5plib_poc_editor_template');
-    $retrieved_selected_template = $templates[($index + 1)];
+    $gottemplates = $DB->get_records('h5plib_poc_editor_template');
+    $templates = [];
+    foreach ($gottemplates as $gottemplate) {
+        array_push($templates, $gottemplate);
+    }
+
+    $retrieved_selected_template = $templates[($index)];
 
     $retrieved_hvp_template = $DB->get_record('hvp', ['id' => $retrieved_selected_template->presentationid]);
     
