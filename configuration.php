@@ -86,6 +86,8 @@ if ($data = $addtemplateform->get_data()) {
         $newtemplate = new stdClass();
         $newtemplate->presentationid = $chosentemplate->id;
         $newtemplate->json_content = $chosentemplate->json_content;
+        $newtemplate->timecreated = time();
+        $newtemplate->timemodified = time();
 
         $DB->insert_record('h5plib_poc_editor_template', $newtemplate);
         redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Template added successfully', null, \core\output\notification::NOTIFY_SUCCESS);
