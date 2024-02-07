@@ -44,6 +44,7 @@ if ($data = $createcourseform->get_data()) {
     $title = required_param('presentation_title', PARAM_TEXT);
     $selected_course_index = required_param('course_select', PARAM_INT);
     $selected_template_index = required_param('template_select', PARAM_INT);
+    $introduction = optional_param('presentation_intro', "", PARAM_TEXT);
     
     if (!empty($title) && !empty($selected_course_index)) {
         $retrieved_course = h5p_poc_editor_find_course($selected_course_index, h5p_poc_editor_get_courses());
@@ -63,7 +64,7 @@ if ($data = $createcourseform->get_data()) {
         $newmodule->params = $template->json_content;
         $newmodule->h5plibrary = $template->library;
         $newmodule->metadata = "";
-        $newmodule->intro = "";
+        $newmodule->intro = $introduction;
         $newmodule->cmidnumber = 0;
         $newmodule->h5paction = 'create';
 

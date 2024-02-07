@@ -50,3 +50,4 @@ $string['nothingtoupdate'] = 'Nothing to update for the moment';
 $string['deletetemplatetitle'] = 'Delete a template';
 $string['notemplatetodelete'] = 'No templates  to delete.';
 $string['deletetemplate'] = 'Delete template';
+$string['presentationintro'] = 'Introduction';
