@@ -26,6 +26,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="presentationid_foreign_key" TYPE="foreign" FIELDS="presentationid" REFTABLE="hvp" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>

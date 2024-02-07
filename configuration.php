@@ -57,7 +57,7 @@ if ($data = $configform->get_data()){
         $newcategory->idnumber = '';
 
         $createdcategory = core_course_category::create($newcategory);
-        $categoryid->$createdcategory->id;
+        $categoryid = $createdcategory->id;
     }
     else {
         $categoryid = $dbcategory->id;

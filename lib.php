@@ -84,7 +84,7 @@ function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourse
 
 function h5p_poc_editor_get_updatable_templates() {
     global $DB;
-    $updatabletemplates = $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified != mdl_hvp.timemodified)');
+    $updatabletemplates = $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified < mdl_hvp.timemodified)');
     return $updatabletemplates;
 }
 
