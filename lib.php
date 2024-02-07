@@ -28,7 +28,7 @@ function h5p_poc_editor_get_courses() {
     $courses = [];
     $retrievedcourses = $DB->get_records('course');
     foreach($retrievedcourses as $course) {
-        if ($course->id > 1) {
+        if ($course->id > 1 && $course->shortname != 'poceditor') {
             array_push($courses, $course);
         }
     }
