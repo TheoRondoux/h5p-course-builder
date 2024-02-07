@@ -38,18 +38,7 @@ if (is_siteadmin()) {
     echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/configuration.php')."'>[Settings]</a>";
 }
 
-echo html_writer::start_tag('div', ['class' => 'new-pres']);
-echo html_writer::start_tag('div', ['class' => 'card']);
-echo html_writer::start_tag('div', ['class' => 'card-body']);
-echo html_writer::start_tag('center', ['class' => 'card-center']);
-echo html_writer::tag('p', 'Create new presentation', ['class' => 'card-text']);
-echo '<a href="creation_form.php"> + </a>';
-echo html_writer::end_tag('center');
-echo html_writer::end_tag('div');
-echo html_writer::end_tag('div');
-echo html_writer::end_tag('div');
-
-echo html_writer::tag('h3', 'My presentations');
+echo html_writer::tag('h4', 'My presentations');
 
 if ($userpresentations) {
     echo $OUTPUT->box_start('card-columns');
@@ -75,5 +64,10 @@ else {
     echo html_writer::tag('p', 'No presentations created yet');
     echo html_writer::end_tag('center');
 }
+
+echo html_writer::start_tag('div', ['class' => 'new-pres']);
+echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; padding:12px 20px 12px 20px; margin-top: 10px;']);
+echo html_writer::end_tag('div');
+
 
 echo $OUTPUT->footer();
