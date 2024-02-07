@@ -111,7 +111,19 @@ function xmldb_h5plib_poc_editor_upgrade($oldversion)
         // Poc_editor savepoint reached.
         upgrade_plugin_savepoint(true, 2024020501, 'h5plib', 'poc_editor');
 
+    }
 
+    if ($oldversion < 2024020701) {
+
+        // Define key presentationid_foreign_key (foreign) to be added to h5plib_poc_editor_template.
+        $table = new xmldb_table('h5plib_poc_editor_template');
+        $key = new xmldb_key('presentationid_foreign_key', XMLDB_KEY_FOREIGN, ['presentationid'], 'hvp', ['id']);
+
+        // Launch add key presentationid_foreign_key.
+        $dbman->add_key($table, $key);
+
+        // Poc_editor savepoint reached.
+        upgrade_plugin_savepoint(true, 2024020701, 'h5plib', 'poc_editor');
     }
 
     return true;

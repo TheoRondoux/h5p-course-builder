@@ -33,10 +33,12 @@ $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fu
 $PAGE->set_heading(get_string('creationtitle', 'h5plib_poc_editor'));
 
 $createcourseform = new \h5plib_poc_editor\form\course_creation_form();
-
-$savedpresentatoindata = [];
-
 $debugprint = "";
+
+$rowtemplates = h5p_poc_editor_get_added_templates();
+if (count($rowtemplates) < 1) {
+    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), 'No templates available for the moment, please contact an administrator.', null, \core\output\notification::NOTIFY_ERROR);
+}
 
 if ($data = $createcourseform->get_data()) {
     $title = required_param('presentation_title', PARAM_TEXT);
@@ -48,8 +50,6 @@ if ($data = $createcourseform->get_data()) {
         $course = get_course($retrieved_course->id);
 
         $template = h5p_poc_editor_find_template($selected_template_index);
-
-        $debugprint = $selected_template_index;
 
         $newmodule = new stdClass();
         $newmodule->module = 24;
