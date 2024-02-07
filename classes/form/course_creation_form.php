@@ -73,6 +73,8 @@ class course_creation_form extends \moodleform {
             'client'
         );
 
+        $ccform->addElement('textarea', 'presentation_intro', get_string('presentationintro', 'h5plib_poc_editor'),'wrap="virtual" rows="7" cols="20"');
+
         $ccform->addElement('submit', 'createpresentationsubmitbutton', get_string('createpresentation', 'h5plib_poc_editor'));
     }
 }
