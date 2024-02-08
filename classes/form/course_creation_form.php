@@ -74,7 +74,7 @@ class course_creation_form extends \moodleform {
         );
 
         $ccform->addElement('textarea', 'presentation_intro', get_string('presentationintro', 'h5plib_poc_editor'),'wrap="virtual" rows="7" cols="20"');
-
+        $ccform->addElement('advcheckbox', 'share_presentation', get_string('sharepresentation', 'h5plib_poc_editor'), ' ', array('shared' => 1), array(0,1));
         $ccform->addElement('submit', 'createpresentationsubmitbutton', get_string('createpresentation', 'h5plib_poc_editor'));
     }
 }
