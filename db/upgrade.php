@@ -126,5 +126,20 @@ function xmldb_h5plib_poc_editor_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2024020701, 'h5plib', 'poc_editor');
     }
 
+    if ($oldversion < 2024020702) {
+
+        // Define field shared to be added to h5plib_poc_editor_pres.
+        $table = new xmldb_table('h5plib_poc_editor_pres');
+        $field = new xmldb_field('shared', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'presentationid');
+
+        // Conditionally launch add field shared.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Poc_editor savepoint reached.
+        upgrade_plugin_savepoint(true, 2024020702, 'h5plib', 'poc_editor');
+    }
+
     return true;
 }

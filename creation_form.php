@@ -45,6 +45,7 @@ if ($data = $createcourseform->get_data()) {
     $selected_course_index = required_param('course_select', PARAM_INT);
     $selected_template_index = required_param('template_select', PARAM_INT);
     $introduction = optional_param('presentation_intro', "", PARAM_TEXT);
+    $shared = optional_param('share_presentation', 0, PARAM_INT);
     
     if (!empty($title) && !empty($selected_course_index)) {
         $retrieved_course = h5p_poc_editor_find_course($selected_course_index, h5p_poc_editor_get_courses());
@@ -74,8 +75,9 @@ if ($data = $createcourseform->get_data()) {
             $savepresensation = new stdClass();
             $savepresensation->userid = $USER->id;
             $savepresensation->presentationid = $result->instance;
+            $savepresensation->shared = $shared;
 
-            $DB->insert_record('h5plib_poc_editor_pres  ', $savepresensation);
+            $DB->insert_record('h5plib_poc_editor_pres', $savepresensation);
         }
 
         redirect(new moodle_url('/h5p/h5plib/poc_editor'), 'Presentation created successfully', null, \core\output\notification::NOTIFY_SUCCESS);
