@@ -21,6 +21,7 @@
 */
 
 require_once('../../../config.php');
+require_once('./lib.php');
 require_login();
 
 $context = context_system::instance();
@@ -52,29 +53,12 @@ echo html_writer::end_tag('div');
 
 echo html_writer::tag('h3', 'My presentations');
 
-if ($userpresentations) {
-    echo $OUTPUT->box_start('card-columns');
-    echo html_writer::start_tag('div', ['class' => 'user-pres']);
-    foreach ($userpresentations as $p) {
-        $moduleid = $DB->get_record('course_modules', ['instance' => $p->id])->id;
-        $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $p->name . '</a>';
-        $courseediturl = '<a href="'.new moodle_url("/course/modedit.php?update=".$moduleid."&return=1").'">[Edit]</a>';
-        echo html_writer::start_tag('div', ['class' => 'card']);
-        echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
-        if ($p->shared == 1) {
-            echo html_writer::start_tag('center');
-            echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
-            echo html_writer::end_tag('center');
-        }
-        echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($p->timecreated), ['class' => 'text-muted']);
-        echo html_writer::end_tag('p');
-        echo html_writer::end_tag('div');
-        echo html_writer::end_tag('div');
-    }
-    echo html_writer::end_tag('div');
-    echo $OUTPUT->box_end();
+if ($userpresentations && count($userpresentations) < 6) {
+    h5plib_poc_editor_display_all_presentations($userpresentations);
+} 
+else if ($userpresentations && count($userpresentations) > 5) {
+    h5plib_poc_editor_display_some_presentations($userpresentations, 6);
+    echo '<center><a href=#>Show all my presentations</a></center>';
 }
 else {
     echo html_writer::start_tag('center');
