@@ -52,23 +52,7 @@ if ($data = $createcourseform->get_data()) {
         $course = get_course($retrieved_course->id);
 
         $template = h5p_poc_editor_find_template($selected_template_index);
-
-        $newmodule = new stdClass();
-        $newmodule->module = 24;
-        $newmodule->visible = 1;
-        $newmodule->visibleoncoursepage = 1;
-        $newmodule->instance = 0;
-        $newmodule->section = 3;
-        $newmodule->modulename = 'hvp';
-        $newmodule->name = $title;
-        $newmodule->introformat = 1;
-        $newmodule->params = $template->json_content;
-        $newmodule->h5plibrary = $template->library;
-        $newmodule->metadata = "";
-        $newmodule->intro = $introduction;
-        $newmodule->cmidnumber = 0;
-        $newmodule->h5paction = 'create';
-
+        $newmodule = h5plib_poc_editor_generate_module($title, $template, $introduction, 'hvp');
         $result = add_moduleinfo($newmodule, $course);
 
         if ($result->instance) {

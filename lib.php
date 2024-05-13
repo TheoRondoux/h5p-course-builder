@@ -186,24 +186,50 @@ function h5plib_poc_editor_display_some_presentations($presentations, $number = 
         foreach ($presentations as $pres) {
             array_push($presentationsarray, $pres);
         }
-        $p = $presentationsarray[$i];
-        $moduleid = $DB->get_record('course_modules', ['instance' => $p->id])->id;
-        $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $p->name . '</a>';
+        $presentation = $presentationsarray[$i];
+        $moduleid = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
+        $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $presentation->name . '</a>';
         $courseediturl = '<a href="'.new moodle_url("/course/modedit.php?update=".$moduleid."&return=1").'">[Edit]</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
         echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
-        if ($p->shared == 1) {
+        if ($presentation->shared == 1) {
             echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
             echo html_writer::end_tag('center');
         }
         echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($p->timecreated), ['class' => 'text-muted']);
+        echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
         echo html_writer::end_tag('p');
         echo html_writer::end_tag('div');
         echo html_writer::end_tag('div');
     }
     echo html_writer::end_tag('div');
     echo $OUTPUT->box_end();
+}
+
+function h5plib_poc_editor_generate_module($title, $template, $introduction, $modulename) {
+    global $DB;
+    $retrivedmodule = $DB->get_record('modules', ['name' => $modulename]);
+    if (empty($retrivedmodule)) {
+        throw new ErrorException('The module "'.$modulename.'" does not exist.');
+    }
+
+    $newmodule = new stdClass();
+    $newmodule->module = $retrivedmodule->id;
+    $newmodule->visible = 1;
+    $newmodule->visibleoncoursepage = 1;
+    $newmodule->instance = 0;
+    $newmodule->section = 3;
+    $newmodule->modulename = $modulename;
+    $newmodule->name = $title;
+    $newmodule->introformat = 1;
+    $newmodule->params = $template->json_content;
+    $newmodule->h5plibrary = $template->library;
+    $newmodule->metadata = "";
+    $newmodule->intro = $introduction;
+    $newmodule->cmidnumber = 0;
+    $newmodule->h5paction = 'create';
+
+    return $newmodule;
 }
