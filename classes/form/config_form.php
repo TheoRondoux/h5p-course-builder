@@ -32,12 +32,12 @@ class config_form extends \moodleform {
         global $DB;
         $mform = $this->_form;
 
-        $mform->addElement('html', '<h3>General configuration</h3>');
+        $mform->addElement('html', '<h3>' . get_string("generalconfiguration", "h5plib_poc_editor") . '</h3>');
         
         $templatecourse = $DB->get_record('course', ['shortname' => 'poceditor']);
         if (!$templatecourse) {
-            $mform->addElement('html', '<center><p>No template course found, do you want to create one?</p></center>');
-            $mform->addElement('submit', 'create_editor_template_course', 'Create course');
+            $mform->addElement('html', '<center><p> ' . get_string('notemplatecreated', 'h5plib_poc_editor') . ' </p></center>');
+            $mform->addElement('submit', 'create_editor_template_course', get_string('createcourse', 'h5plib_poc_editor'));
         } 
         else {
             $mform->addElement('html', '<center><p>Template course already created, you can click <a href="'. (new \moodle_url("/course/view.php?id=".$templatecourse->id)).'">here</a> to access it</p></center>');

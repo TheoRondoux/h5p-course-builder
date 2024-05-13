@@ -57,9 +57,6 @@ class course_creation_form extends \moodleform {
             '',
             'client'
         );
-        // TODO: Find how to use the compare type for the addRule() function. 
-        // One way: using an attribute directly in the element and not the rule like so:
-        // $form->addElement('select', 'iselTest', 'Test Select:', $arrayOfOptions, array('onchange' => 'javascript:myFunctionToDoSomething();')); 
 
         $rowtemplates = h5p_poc_editor_get_added_templates();
         $templatesnames = h5p_poc_editor_get_templates_names($rowtemplates);

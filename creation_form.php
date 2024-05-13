@@ -37,7 +37,7 @@ $debugprint = "";
 
 $rowtemplates = h5p_poc_editor_get_added_templates();
 if (count($rowtemplates) < 1) {
-    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), 'No templates available for the moment, please contact an administrator.', null, \core\output\notification::NOTIFY_ERROR);
+    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), get_string('notemplateerror', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 if ($data = $createcourseform->get_data()) {
@@ -64,13 +64,13 @@ if ($data = $createcourseform->get_data()) {
             $DB->insert_record('h5plib_poc_editor_pres', $savepresensation);
         }
 
-        redirect(new moodle_url('/h5p/h5plib/poc_editor'), 'Presentation created successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect(new moodle_url('/h5p/h5plib/poc_editor'), get_string('presentationcreated', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
 
 
 echo $OUTPUT->header();
-echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
+echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
 $createcourseform->display();
 print_r($debugprint);
 echo $OUTPUT->footer();

@@ -37,6 +37,8 @@ $string['createpresentation'] = "Create presentation";
 $string['configtitle'] = "Poc Editor Settings";
 $string['selecttemplate'] = 'Chose a template';
 $string['requiredtemplatechoice'] = 'Please chose a template to use for your presentation.';
+$string['settings'] = 'Settings';
+$string['back'] = 'Back';
 
 $string['templatemanagementtitle'] = "Templates management";
 $string['addtemplate'] = "Add a template";
@@ -52,3 +54,26 @@ $string['notemplatetodelete'] = 'No templates  to delete.';
 $string['deletetemplate'] = 'Delete template';
 $string['presentationintro'] = 'Introduction';
 $string['sharepresentation'] = 'Share your presentation';
+
+$string['mypresentationstitle'] = "My presentations";
+$string['createnewpresentation'] = "Create new presentation";
+$string['nopresentation'] = "No presentations created yet";
+$string['showpresentations'] = "Show all my presentations";
+
+$string['sharedpresentationstitle'] = "Shared presentations";
+$string['nosharedpresentations'] = "No shared presentations created yet";
+
+$string['notemplateerror'] = 'No templates available for the moment, please contact an administrator.';
+$string['presentationcreated'] = 'Presentation created successfully';
+
+$string['noaccesstosettings'] = 'Unable to access to the plugin\'s settings page. You need to be a site administrator.';
+$string['categorydescription'] = "A category to reference all the courses needed for the presentation editor";
+$string['courseadded'] = "Poc Editor course added successfully";
+$string['templateadded'] = "Template added successfully";
+$string['templatesupdated'] = "Templates updated successfully";
+$string['templatedeleted'] = "Template deleted successfully";
+
+$string['generalconfiguration'] = "General configuration";
+$string['notemplatecreated'] = "No template course found, do you want to create one?";
+$string['createcourse'] = "Create course";
+
