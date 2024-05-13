@@ -34,7 +34,7 @@ $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fu
 $PAGE->set_heading(get_string('configtitle', 'h5plib_poc_editor'));
 
 if (!is_siteadmin()) {
-    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), 'Unable to access to the plugin\'s settings page. You need to be a site administrator.', null, \core\output\notification::NOTIFY_ERROR);
+    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), get_string('noaccesstosettings', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_ERROR);
 }
 
 $debugvar = "";
@@ -52,7 +52,7 @@ if ($data = $configform->get_data()){
     if (!$dbcategory) {
         $newcategory = new stdClass();
         $newcategory->name = $categoryname;
-        $newcategory->description = "A category to reference all the courses needed for the presentation editor";
+        $newcategory->description = get_string('categorydescription', 'h5plib_poc_editor');
         $newcategory->visible = 0;
         $newcategory->idnumber = '';
 
@@ -70,7 +70,7 @@ if ($data = $configform->get_data()){
     $newcourse->visible = 0;
 
     $createdcourse = create_course($newcourse);
-    redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Poc Editor course added successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+    redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), get_string('courseadded', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
 if ($data = $addtemplateform->get_data()) {
@@ -90,7 +90,7 @@ if ($data = $addtemplateform->get_data()) {
         $newtemplate->timemodified = time();
 
         $DB->insert_record('h5plib_poc_editor_template', $newtemplate);
-        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Template added successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), get_string('templateadded', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
 
@@ -98,7 +98,7 @@ if ($data = $updatetemplateform->get_data()) {
     $templates = h5p_poc_editor_get_updatable_templates();
     $issuccess = h5p_poc_editor_update_templates($templates);
     if ($issuccess) {
-        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Templates updated successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), get_string('templatesupdated', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
 
@@ -107,12 +107,12 @@ if ($data = $deletetemplateform->get_data()) {
         $selectedtemplateindex = $data->select_delete_template;
         $selectedtemplate = h5p_poc_editor_find_template($selectedtemplateindex);
         $DB->delete_records('h5plib_poc_editor_template', ['id' => $selectedtemplate->id]);
-        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), 'Template deleted successfully', null, \core\output\notification::NOTIFY_SUCCESS);
+        redirect(new moodle_url('/h5p/h5plib/poc_editor/configuration.php'), get_string('templatedeleted', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
 
 echo $OUTPUT->header();
-echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
+echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
 $configform->display();
 echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
 $addtemplateform->display();
