@@ -35,7 +35,6 @@ $userpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_
 $sharedpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' . $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
 
 echo $OUTPUT->header();
-
 if (is_siteadmin()) {
     echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/configuration.php')."'>[" . get_string('settings' ,'h5plib_poc_editor') . "]</a>";
 }
@@ -58,7 +57,7 @@ if ($userpresentations && count($userpresentations) < 6) {
 } 
 else if ($userpresentations && count($userpresentations) > 5) {
     h5plib_poc_editor_display_some_presentations($userpresentations, 6);
-    echo '<center><a href=#>' . get_string('showpresentations', 'h5plib_poc_editor') . '</a></center>';
+    echo '<center><a href="presentations.php">' . get_string('showpresentations', 'h5plib_poc_editor') . '</a></center>';
 }
 else {
     echo html_writer::start_tag('center');
