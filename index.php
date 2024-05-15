@@ -33,6 +33,7 @@ use core_analytics\site;
 require_once('../../../config.php');
 require_once('./lib.php');
 require_login();
+h5plib_poc_editor_no_access_redirect($USER);
 
 $context = context_system::instance();
 $PAGE->set_context($context);

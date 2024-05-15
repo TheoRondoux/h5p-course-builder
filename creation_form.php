@@ -34,6 +34,7 @@ require_once('../../../config.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_login();
+h5plib_poc_editor_no_access_redirect($USER);
 
 $context = context_system::instance();
 $PAGE->set_context($context);

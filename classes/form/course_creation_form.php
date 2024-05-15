@@ -43,9 +43,6 @@ class course_creation_form extends \moodleform {
                 '',
                 'client'
         );
-        if (!h5plib_poc_editor_is_enrolled_to_any_course($USER)) {
-            h5plib_poc_editor_redirect_error(get_string('nocoursesenrolledin', 'h5plib_poc_editor'));
-        }
 
         $courses = h5p_poc_editor_get_courses();
         $teacherCourses = h5plib_poc_editor_check_if_teacher_in_courses($USER, $courses);
