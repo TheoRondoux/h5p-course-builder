@@ -71,9 +71,13 @@ else {
     echo html_writer::end_tag('center');
 }
 
+<<<<<<< HEAD
 echo html_writer::tag('br', '');
 
 echo html_writer::tag('h3', 'Shared Presentations');
+=======
+echo html_writer::tag('h4', 'My presentations');
+>>>>>>> c067e85b88d2ad5d25d29cc710265e073b7970c6
 
 if (count($sharedpresentations) > 0) {
     echo $OUTPUT->box_start('card-columns');
@@ -101,5 +105,12 @@ else {
     echo html_writer::end_tag('center');
 }
 
+<<<<<<< HEAD
+=======
+echo html_writer::start_tag('div', ['class' => 'new-pres']);
+echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; padding:12px 20px 12px 20px; margin-top: 10px;']);
+echo html_writer::end_tag('div');
+
+>>>>>>> c067e85b88d2ad5d25d29cc710265e073b7970c6
 
 echo $OUTPUT->footer();
