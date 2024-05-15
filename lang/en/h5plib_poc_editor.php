@@ -65,6 +65,7 @@ $string['nosharedpresentations'] = "No shared presentations created yet";
 
 $string['notemplateerror'] = 'No templates available for the moment, please contact an administrator.';
 $string['presentationcreated'] = 'Presentation created successfully';
+$string['nocoursesenrolledin'] = 'Unable to create a presentation, your are not enrolled in any courses.';
 
 $string['noaccesstosettings'] = 'Unable to access to the plugin\'s settings page. You need to be a site administrator.';
 $string['categorydescription'] = "A category to reference all the courses needed for the presentation editor";
@@ -76,4 +77,3 @@ $string['templatedeleted'] = "Template deleted successfully";
 $string['generalconfiguration'] = "General configuration";
 $string['notemplatecreated'] = "No template course found, do you want to create one?";
 $string['createcourse'] = "Create course";
-
