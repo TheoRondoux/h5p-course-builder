@@ -66,7 +66,7 @@ $string['nosharedpresentations'] = "No shared presentations created yet";
 $string['notemplateerror'] = 'No templates available for the moment, please contact an administrator.';
 $string['presentationcreated'] = 'Presentation created successfully';
 $string['nocoursesenrolledin'] = 'Unable to create a presentation, you are not enrolled in any courses.';
-$string['noteditingteacherinanycourse'] = 'Unable to access to the page, you are not an editing teacher in any courses.';
+$string['noteditingteacherinanycourse'] = 'Unable to access the page, you are not an editing teacher in any courses.';
 
 $string['noaccesstosettings'] = 'Unable to access to the plugin\'s settings page. You need to be a site administrator.';
 $string['categorydescription'] = "A category to reference all the courses needed for the presentation editor";
