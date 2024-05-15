@@ -34,7 +34,7 @@ $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fu
 $PAGE->set_heading(get_string('configtitle', 'h5plib_poc_editor'));
 
 if (!is_siteadmin()) {
-    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), get_string('noaccesstosettings', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_ERROR);
+    h5plib_poc_editor_redirect_error(get_string('noaccesstosettings', 'h5plib_poc_editor'));
 }
 
 $debugvar = "";

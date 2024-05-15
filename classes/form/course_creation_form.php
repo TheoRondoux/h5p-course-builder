@@ -46,18 +46,23 @@ class course_creation_form extends \moodleform {
             '',
             'client'
         );
+        if (!h5plib_poc_editor_is_enrolled_to_any_course($USER)) {
+            h5plib_poc_editor_redirect_error(get_string('nocoursesenrolledin', 'h5plib_poc_editor'));
+        }
 
         $courses = h5p_poc_editor_get_courses();
+        $teachercourses = h5plib_poc_editor_check_if_teacher_in_courses($USER, $courses);
+        if (sizeof($teachercourses) < 1) {
+            h5plib_poc_editor_redirect_error(get_string('noteditingteacherinanycourse', 'h5plib_poc_editor'));
+        }
+
         $coursesname = [];
         array_push($coursesname, get_string('selectcoursetext', 'h5plib_poc_editor'));
-        foreach ( $courses as $course ) {
-            if (is_enrolled(context_course::instance($course->id), $USER)) {
-                $coursesname[] = $course->fullname;
-            }
+        foreach ( $teachercourses as $course ) {
+            $coursesname[] = $course->fullname;
         }
-        if (sizeof($coursesname) <= 1) {
-            redirect(new moodle_url('/h5p/h5plib/poc_editor'), get_string('nocoursesenrolledin', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_ERROR);
-        }
+
+
         $ccform->addElement('select', 'course_select', get_string('coursechoice', 'h5plib_poc_editor'), $coursesname );
         $ccform->addRule(
             'course_select', 
