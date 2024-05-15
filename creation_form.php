@@ -18,10 +18,10 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 require_once('../../../config.php');
-require_once($CFG->dirroot. '/h5p/h5plib/poc_editor/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
 require_login();
 
@@ -46,7 +46,7 @@ if ($data = $createcourseform->get_data()) {
     $selected_template_index = required_param('template_select', PARAM_INT);
     $introduction = optional_param('presentation_intro', "", PARAM_TEXT);
     $shared = optional_param('share_presentation', 0, PARAM_INT);
-    
+
     if (!empty($title) && !empty($selected_course_index)) {
         $retrieved_course = h5p_poc_editor_find_course($selected_course_index, h5p_poc_editor_get_courses());
         $course = get_course($retrieved_course->id);
@@ -70,7 +70,7 @@ if ($data = $createcourseform->get_data()) {
 
 
 echo $OUTPUT->header();
-echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
+echo "<a href='" . new moodle_url('/h5p/h5plib/poc_editor/') . "'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
 $createcourseform->display();
 print_r($debugprint);
 echo $OUTPUT->footer();
