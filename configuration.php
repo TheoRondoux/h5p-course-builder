@@ -25,6 +25,9 @@ require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once('./lib.php');
 require_login();
+if (!is_siteadmin()) {
+    h5plib_poc_editor_redirect_error(get_string('noaccesstosettings', 'h5plib_poc_editor'));
+}
 
 $context = context_system::instance();
 $PAGE->set_context($context);
@@ -33,9 +36,6 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('configtitle', 'h5plib_poc_editor'));
 
-if (!is_siteadmin()) {
-    h5plib_poc_editor_redirect_error(get_string('noaccesstosettings', 'h5plib_poc_editor'));
-}
 
 $debugvar = "";
 
