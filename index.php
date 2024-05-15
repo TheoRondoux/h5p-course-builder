@@ -32,7 +32,7 @@ $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fu
 $PAGE->set_heading(get_string('pluginname', 'h5plib_poc_editor'));
 
 $userpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = '.$USER->id.') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
-$sharedpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' . $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
+$sharedpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.course, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' . $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
 
 echo $OUTPUT->header();
 if (is_siteadmin()) {
@@ -51,7 +51,6 @@ echo html_writer::end_tag('div');
 echo html_writer::end_tag('div');
 
 echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_poc_editor'));
-
 if ($userpresentations && count($userpresentations) < 6) {
     h5plib_poc_editor_display_all_presentations($userpresentations);
 } 

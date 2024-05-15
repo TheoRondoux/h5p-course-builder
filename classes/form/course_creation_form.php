@@ -24,12 +24,16 @@ namespace h5plib_poc_editor\form;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once($CFG->dirroot. '/h5p/h5plib/poc_editor/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
+
+use context_course;
+use moodle_url;
 
 class course_creation_form extends \moodleform {
     public function definition() {
-        global $DB;
+        global $USER;
 
         $ccform = $this->_form;
 
@@ -46,8 +50,13 @@ class course_creation_form extends \moodleform {
         $courses = h5p_poc_editor_get_courses();
         $coursesname = [];
         array_push($coursesname, get_string('selectcoursetext', 'h5plib_poc_editor'));
-        foreach ( $courses as $c ) {
-            array_push($coursesname, $c->fullname);
+        foreach ( $courses as $course ) {
+            if (is_enrolled(context_course::instance($course->id), $USER)) {
+                $coursesname[] = $course->fullname;
+            }
+        }
+        if (sizeof($coursesname) <= 1) {
+            redirect(new moodle_url('/h5p/h5plib/poc_editor'), get_string('nocoursesenrolledin', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_ERROR);
         }
         $ccform->addElement('select', 'course_select', get_string('coursechoice', 'h5plib_poc_editor'), $coursesname );
         $ccform->addRule(
