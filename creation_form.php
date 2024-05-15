@@ -37,7 +37,7 @@ $debugprint = "";
 
 $rowtemplates = h5p_poc_editor_get_added_templates();
 if (count($rowtemplates) < 1) {
-    redirect(new moodle_url('/h5p/h5plib/poc_editor/'), get_string('notemplateerror', 'h5plib_poc_editor'), null, \core\output\notification::NOTIFY_ERROR);
+    h5plib_poc_editor_redirect_error(get_string('notemplateerror', 'h5plib_poc_editor'));
 }
 
 if ($data = $createcourseform->get_data()) {
