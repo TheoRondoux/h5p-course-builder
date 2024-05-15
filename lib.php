@@ -33,8 +33,17 @@
 
 use core_analytics\site;
 
-function h5p_poc_editor_get_courses(): array
-{
+function h5plib_poc_editor_extend_navigation_frontpage(navigation_node $frontpage) {
+    $frontpage->add(
+            get_string('pluginname', 'h5plib_poc_editor'),
+            new moodle_url('/h5p/h5plib/poc_editor/index.php'),
+            navigation_node::TYPE_CUSTOM,
+            'poceditor',
+            2
+    );
+}
+
+function h5p_poc_editor_get_courses(): array {
     global $DB;
     $courses = [];
     $retrievedcourses = $DB->get_records('course');
@@ -72,8 +81,7 @@ function h5p_poc_editor_get_added_templates(): array {
     return $DB->get_records('h5plib_poc_editor_template');
 }
 
-function h5p_poc_editor_get_available_templates(array $addedTemplates, int $templateCourseId): array
-{
+function h5p_poc_editor_get_available_templates(array $addedTemplates, int $templateCourseId): array {
     global $DB;
     $availableTemplates = [];
     $importedTemplates = $DB->get_records('hvp', ['course' => $templateCourseId]);
@@ -101,14 +109,12 @@ function h5p_poc_editor_get_available_templates(array $addedTemplates, int $temp
 /**
  * @return array The templates that have been updated in the course but not in the plugin
  */
-function h5p_poc_editor_get_updatable_templates(): array
-{
+function h5p_poc_editor_get_updatable_templates(): array {
     global $DB;
     return $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified < mdl_hvp.timemodified)');
 }
 
-function h5p_poc_editor_find_template(int $index): stdClass
-{
+function h5p_poc_editor_find_template(int $index): stdClass {
     global $DB;
     $templateInfos = new stdClass();
 
@@ -133,8 +139,7 @@ function h5p_poc_editor_find_template(int $index): stdClass
     return $templateInfos;
 }
 
-function h5p_poc_editor_update_templates(array $templates): bool
-{
+function h5p_poc_editor_update_templates(array $templates): bool {
     global $DB;
     if (!empty($templates)) {
         foreach ($templates as $template) {
@@ -168,8 +173,7 @@ function h5p_poc_editor_get_templates_names(array $templates): array {
     return $names;
 }
 
-function h5plib_poc_editor_display_all_presentations(array $presentations): void
-{
+function h5plib_poc_editor_display_all_presentations(array $presentations): void {
     global $OUTPUT;
     global $DB;
 
@@ -198,8 +202,7 @@ function h5plib_poc_editor_display_all_presentations(array $presentations): void
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_display_some_presentations(array $presentations, int $number = 5): void
-{
+function h5plib_poc_editor_display_some_presentations(array $presentations, int $number = 5): void {
     global $OUTPUT;
     global $DB;
 
@@ -233,8 +236,7 @@ function h5plib_poc_editor_display_some_presentations(array $presentations, int 
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_generate_module(string $title, string $template, string $introduction, string $modulename): stdClass
-{
+function h5plib_poc_editor_generate_module(string $title, string $template, string $introduction, string $modulename): stdClass {
     global $DB;
     $retrievedModule = $DB->get_record('modules', ['name' => $modulename]);
     if (empty($retrievedModule)) {
@@ -283,13 +285,12 @@ function h5plib_poc_editor_check_if_teacher_in_courses(stdClass $user, array $co
  * @param string $path
  * @return void
  */
-function h5plib_poc_editor_redirect_error(string $message, string $path = '/h5p/h5plib/poc_editor')
-{
+function h5plib_poc_editor_redirect_error(string $message, string $path = '/h5p/h5plib/poc_editor') {
     $prefix = "[" . get_string('pluginname', 'h5plib_poc_editor') . "] Error: ";
     redirect(new moodle_url($path),
-        $prefix . $message,
-        null,
-        \core\output\notification::NOTIFY_ERROR);
+            $prefix . $message,
+            null,
+            \core\output\notification::NOTIFY_ERROR);
 
 }
 
@@ -324,8 +325,7 @@ function h5plib_poc_editor_is_enrolled_to_any_course($user): bool {
  * @param stdClass $user
  * @return void
  */
-function h5plib_poc_editor_no_access_redirect(stdClass $user): void
-{
+function h5plib_poc_editor_no_access_redirect(stdClass $user): void {
     if (!is_siteadmin() && !h5plib_poc_editor_is_enrolled_to_any_course($user)) {
         h5plib_poc_editor_redirect_error(get_string('nocoursesenrolledin', 'h5plib_poc_editor'), '/');
     }
