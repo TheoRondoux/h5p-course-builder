@@ -18,7 +18,7 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 namespace h5plib_poc_editor\form;
 
@@ -30,25 +30,25 @@ require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
 class config_add_template_form extends \moodleform {
     public function definition() {
-        $mform = $this->_form;
+        $form = $this->_form;
 
-        $mform->addElement('html', '<h4>' . get_string('addtemplate', 'h5plib_poc_editor') . '</h4>');
+        $form->addElement('html', '<h4>' . get_string('addtemplate', 'h5plib_poc_editor') . '</h4>');
 
-        $templatecourse = h5p_poc_editor_get_template_course();
-        if (!empty($templatecourse->id)) {
-            $templatecourseid = $templatecourse->id;
-            $addedtemplates = h5p_poc_editor_get_added_templates(); 
-            $availabletemplates = h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid);
-            if (count($availabletemplates) > 0) {
-                $availabletemplatesnames = [];
-                foreach ($availabletemplates as $availabletemplate) {
-                    array_push($availabletemplatesnames, $availabletemplate->name);
+        $templateCourse = h5p_poc_editor_get_template_course();
+        if (!empty($templateCourse->id)) {
+            $templateCourseId = $templateCourse->id;
+            $addedTemplates = h5p_poc_editor_get_added_templates();
+            $availableTemplates = h5p_poc_editor_get_available_templates($addedTemplates, $templateCourseId);
+            if (count($availableTemplates) > 0) {
+                $availableTemplatesNames = [];
+                foreach ($availableTemplates as $availableTemplate) {
+                    $availableTemplatesNames[] = $availableTemplate->name;
                 }
-                $mform->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'), $availabletemplatesnames);
-                $mform->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'));
-            }
-            else {
-                $mform->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
+                $form->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'),
+                        $availableTemplatesNames);
+                $form->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'));
+            } else {
+                $form->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
             }
         }
 

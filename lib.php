@@ -21,10 +21,19 @@
  * @category    string
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @var admin_root $ADMIN
+ * @var moodle_page $PAGE
+ * @var moodle_database $DB
+ * @var stdClass $CFG
+ * @var site $SITE
+ * @var stdClass $USER
+ * @var core_renderer $OUTPUT
  */
 
-function h5p_poc_editor_get_courses(): array
-{
+use core_analytics\site;
+
+function h5p_poc_editor_get_courses(): array {
     global $DB;
     $courses = [];
     $retrievedcourses = $DB->get_records('course');
@@ -36,27 +45,23 @@ function h5p_poc_editor_get_courses(): array
     return $courses;
 }
 
-function h5p_poc_editor_find_course($selectedcourseindex, $courses): stdClass
-{
+function h5p_poc_editor_find_course($selectedcourseindex, $courses): stdClass {
     return $courses[($selectedcourseindex - 1)];
 }
 
-function h5p_poc_editor_get_template_course()
-{
+function h5p_poc_editor_get_template_course() {
     global $DB;
     $templatecourse = $DB->get_record('course', ['shortname' => 'poceditor']);
     return $templatecourse;
 }
 
-function h5p_poc_editor_get_added_templates()
-{
+function h5p_poc_editor_get_added_templates() {
     global $DB;
     $addedtemplates = $DB->get_records('h5plib_poc_editor_template');
     return $addedtemplates;
 }
 
-function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid): array
-{
+function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid): array {
     global $DB;
     $availabletemplates = [];
     $importedtemplates = $DB->get_records('hvp', ['course' => $templatecourseid]);
@@ -81,14 +86,12 @@ function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourse
     return $availabletemplates;
 }
 
-function h5p_poc_editor_get_updatable_templates(): array
-{
+function h5p_poc_editor_get_updatable_templates(): array {
     global $DB;
     return $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified < mdl_hvp.timemodified)');
 }
 
-function h5p_poc_editor_find_template($index): stdClass
-{
+function h5p_poc_editor_find_template($index): stdClass {
     global $DB;
     $templateinfos = new stdClass();
 
@@ -114,12 +117,12 @@ function h5p_poc_editor_find_template($index): stdClass
     return $templateinfos;
 }
 
-function h5p_poc_editor_update_templates($templates): bool
-{
+function h5p_poc_editor_update_templates($templates): bool {
     global $DB;
     if (!empty($templates)) {
         foreach ($templates as $template) {
-            $templateid = $DB->get_record_sql("SELECT id FROM mdl_h5plib_poc_editor_template WHERE presentationid = " . $template->id);
+            $templateid =
+                    $DB->get_record_sql("SELECT id FROM mdl_h5plib_poc_editor_template WHERE presentationid = " . $template->id);
 
             $dataToUpdate = new stdClass();
             $dataToUpdate->id = $templateid->id;
@@ -136,8 +139,7 @@ function h5p_poc_editor_update_templates($templates): bool
     return false;
 }
 
-function h5p_poc_editor_get_templates_names($templates): array
-{
+function h5p_poc_editor_get_templates_names($templates): array {
     global $DB;
     $names = [];
     foreach ($templates as $template) {
@@ -150,8 +152,7 @@ function h5p_poc_editor_get_templates_names($templates): array
     return $names;
 }
 
-function h5plib_poc_editor_display_all_presentations($presentations): void
-{
+function h5plib_poc_editor_display_all_presentations($presentations): void {
     global $OUTPUT;
     global $DB;
 
@@ -159,7 +160,8 @@ function h5plib_poc_editor_display_all_presentations($presentations): void
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
     foreach ($presentations as $p) {
         $moduleid = $DB->get_record('course_modules', ['instance' => $p->id])->id;
-        $courseviewurl = '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid . "&forceview=1") . '">' . $p->name . '</a>';
+        $courseviewurl =
+                '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid . "&forceview=1") . '">' . $p->name . '</a>';
         $courseediturl = '<a href="' . new moodle_url("/course/modedit.php?update=" . $moduleid . "&return=1") . '">[Edit]</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
@@ -179,8 +181,7 @@ function h5plib_poc_editor_display_all_presentations($presentations): void
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_display_some_presentations($presentations, $number = 5): void
-{
+function h5plib_poc_editor_display_some_presentations($presentations, $number = 5): void {
     global $OUTPUT;
     global $DB;
 
@@ -193,7 +194,9 @@ function h5plib_poc_editor_display_some_presentations($presentations, $number = 
         }
         $presentation = $presentationsarray[$i];
         $moduleid = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
-        $courseviewurl = '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid . "&forceview=1") . '">' . $presentation->name . '</a>';
+        $courseviewurl =
+                '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid . "&forceview=1") . '">' . $presentation->name .
+                '</a>';
         $courseediturl = '<a href="' . new moodle_url("/course/modedit.php?update=" . $moduleid . "&return=1") . '">[Edit]</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
@@ -213,8 +216,7 @@ function h5plib_poc_editor_display_some_presentations($presentations, $number = 
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_generate_module($title, $template, $introduction, $modulename): stdClass
-{
+function h5plib_poc_editor_generate_module($title, $template, $introduction, $modulename): stdClass {
     global $DB;
     $retrivedmodule = $DB->get_record('modules', ['name' => $modulename]);
     if (empty($retrivedmodule)) {
@@ -244,11 +246,10 @@ function h5plib_poc_editor_generate_module($title, $template, $introduction, $mo
  * @param $user stdClass The user to check the role
  * @return array an array of course ids
  * */
-function h5plib_poc_editor_check_if_teacher_in_courses(stdClass $user, array $courses): array
-{
+function h5plib_poc_editor_check_if_teacher_in_courses(stdClass $user, array $courses): array {
     $user_id = $user->id;
     $capability = 'moodle/course:update';
-    $modifiable_courses = array();
+    $modifiable_courses = [];
     foreach ($courses as $course) {
         if (has_capability($capability, context_course::instance($course->id), $user_id)) {
             $modifiable_courses[] = $course;
@@ -257,25 +258,22 @@ function h5plib_poc_editor_check_if_teacher_in_courses(stdClass $user, array $co
     return $modifiable_courses;
 }
 
-function h5plib_poc_editor_redirect_error(string $message)
-{
+function h5plib_poc_editor_redirect_error(string $message) {
     redirect(new moodle_url('/h5p/h5plib/poc_editor'),
-        $message,
-        null,
-        \core\output\notification::NOTIFY_ERROR);
+            $message,
+            null,
+            \core\output\notification::NOTIFY_ERROR);
 
 }
 
-function h5plib_poc_editor_redirect_success(string $message)
-{
+function h5plib_poc_editor_redirect_success(string $message) {
     redirect(new moodle_url('/h5p/h5plib/poc_editor'),
-        $message,
-        null,
-        \core\output\notification::NOTIFY_SUCCESS);
+            $message,
+            null,
+            \core\output\notification::NOTIFY_SUCCESS);
 }
 
-function h5plib_poc_editor_is_enrolled_to_any_course($user): bool
-{
+function h5plib_poc_editor_is_enrolled_to_any_course($user): bool {
     $courses = h5p_poc_editor_get_courses();
     $isEnrolled = false;
     foreach ($courses as $course) {

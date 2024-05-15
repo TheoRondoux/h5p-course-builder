@@ -21,7 +21,17 @@
  * @category    string
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @var admin_root $ADMIN
+ * @var moodle_page $PAGE
+ * @var moodle_database $DB
+ * @var stdClass $CFG
+ * @var site $SITE
+ * @var stdClass $USER
+ * @var core_renderer $OUTPUT
  */
+
+use core_analytics\site;
 
 require_once('../../../config.php');
 require_once('./lib.php');
@@ -34,9 +44,11 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('mypresentationstitle', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('mypresentationstitle', 'h5plib_poc_editor'));
 
-$userpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = '.$USER->id.') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
+$userPresentations =
+        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = ' .
+                $USER->id . ') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
 
 echo $OUTPUT->header();
-echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
-h5plib_poc_editor_display_all_presentations($userpresentations);
+echo "<a href='" . new moodle_url('/h5p/h5plib/poc_editor/') . "'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
+h5plib_poc_editor_display_all_presentations($userPresentations);
 echo $OUTPUT->footer();

@@ -18,7 +18,7 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 namespace h5plib_poc_editor\form;
 
@@ -30,17 +30,17 @@ require_once($CFG->dirroot . '/config.php');
 class config_form extends \moodleform {
     public function definition() {
         global $DB;
-        $mform = $this->_form;
+        $form = $this->_form;
 
-        $mform->addElement('html', '<h3>' . get_string("generalconfiguration", "h5plib_poc_editor") . '</h3>');
-        
-        $templatecourse = $DB->get_record('course', ['shortname' => 'poceditor']);
-        if (!$templatecourse) {
-            $mform->addElement('html', '<center><p> ' . get_string('notemplatecreated', 'h5plib_poc_editor') . ' </p></center>');
-            $mform->addElement('submit', 'create_editor_template_course', get_string('createcourse', 'h5plib_poc_editor'));
-        } 
-        else {
-            $mform->addElement('html', '<center><p>Template course already created, you can click <a href="'. (new \moodle_url("/course/view.php?id=".$templatecourse->id)).'">here</a> to access it</p></center>');
+        $form->addElement('html', '<h3>' . get_string("generalconfiguration", "h5plib_poc_editor") . '</h3>');
+
+        $templateCourse = $DB->get_record('course', ['shortname' => 'poceditor']);
+        if (!$templateCourse) {
+            $form->addElement('html', '<center><p> ' . get_string('notemplatecreated', 'h5plib_poc_editor') . ' </p></center>');
+            $form->addElement('submit', 'create_editor_template_course', get_string('createcourse', 'h5plib_poc_editor'));
+        } else {
+            $form->addElement('html', '<center><p>Template course already created, you can click <a href="' .
+                    (new \moodle_url("/course/view.php?id=" . $templateCourse->id)) . '">here</a> to access it</p></center>');
         }
     }
 }
