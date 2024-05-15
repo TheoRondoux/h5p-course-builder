@@ -159,6 +159,7 @@ function h5plib_poc_editor_display_all_presentations($presentations) {
         $courseediturl = '<a href="'.new moodle_url("/course/modedit.php?update=".$moduleid."&return=1").'">[Edit]</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
+        echo html_writer::empty_tag('img', ['src' => 'https://picsum.photos/200/300', 'class' => 'card-img-top', 'alt' => 'Card image']);
         echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
         if ($p->shared == 1) {
             echo html_writer::start_tag('center');
@@ -180,6 +181,7 @@ function h5plib_poc_editor_display_some_presentations($presentations, $number = 
     global $DB;
 
     echo $OUTPUT->box_start('card-columns');
+    // echo html_writer::start_tag('div', ['class' => 'card-group']);
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
     for ($i = 0 ; $i < $number ; $i++) {
         $presentationsarray = [];
@@ -190,20 +192,30 @@ function h5plib_poc_editor_display_some_presentations($presentations, $number = 
         $moduleid = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
         $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $presentation->name . '</a>';
         $courseediturl = '<a href="'.new moodle_url("/course/modedit.php?update=".$moduleid."&return=1").'">[Edit]</a>';
+
+
+        echo html_writer::start_tag('div', ['class' => 'card-group']);
         echo html_writer::start_tag('div', ['class' => 'card']);
+        echo html_writer::empty_tag('img', ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=42b2d9ae6feb9c4ff98b9133addfb698 ', 'class' => 'card-img-top', 'alt' => 'Card image']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
+        echo html_writer::tag('h5', $courseviewurl , ['class' => 'card-title']);
+        echo html_writer::tag('p', 'i do not know what to say here so blah blah blah blah blah and another blah blah blah' , ['class' => 'card-text']);
         if ($presentation->shared == 1) {
-            echo html_writer::start_tag('center');
+            // echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
-            echo html_writer::end_tag('center');
+            // echo html_writer::end_tag('center');
         }
-        echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
-        echo html_writer::end_tag('p');
+        echo html_writer::end_tag('div');
+
+        echo html_writer::start_tag('div', ['class' => 'card-footer']);
+        echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-body-secondary']);
+        echo html_writer::end_tag('div');
+
+
         echo html_writer::end_tag('div');
         echo html_writer::end_tag('div');
     }
+    // echo html_writer::end_tag('div');
     echo html_writer::end_tag('div');
     echo $OUTPUT->box_end();
 }

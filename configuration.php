@@ -112,7 +112,8 @@ if ($data = $deletetemplateform->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/')."'>[Back]</a>";
+$settings_url = new moodle_url('/h5p/h5plib/poc_editor/');
+echo html_writer::tag('a', 'Back', ['href' => $settings_url , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; padding:6px 15px 6px 15px; margin-top: 10px; border-color: #3F2A56;']);
 $configform->display();
 echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
 $addtemplateform->display();

@@ -37,17 +37,33 @@ $sharedpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, md
 echo $OUTPUT->header();
 
 if (is_siteadmin()) {
-    echo "<a href='".new moodle_url('/h5p/h5plib/poc_editor/configuration.php')."'>[Settings]</a>";
-}
+    $settings_url = new moodle_url('/h5p/h5plib/poc_editor/configuration.php');
+    echo html_writer::tag('a', 'Settings', ['href' => $settings_url , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; border-color: #3F2A56; padding:8px 15px 8px 15px; margin-top: 10px;']);
 
-echo html_writer::tag('h4', 'My presentations');
+}
+echo html_writer::tag('br', '');
+
+echo html_writer::start_tag('div', ['class' => 'd-grid gap-2 col-6 mx-auto']);
+echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'style' => ' background-color: #3F2A56; border-color: #3F2A56; padding:12px 20px 12px 20px;']);
+
+echo html_writer::end_tag('div');
+
+echo html_writer::tag('br', '');
+
+echo html_writer::tag('h4', 'My Presentations');
+
 
 if ($userpresentations && count($userpresentations) < 6) {
     h5plib_poc_editor_display_all_presentations($userpresentations);
 } 
 else if ($userpresentations && count($userpresentations) > 5) {
     h5plib_poc_editor_display_some_presentations($userpresentations, 6);
-    echo '<center><a href=#>Show all my presentations</a></center>';
+
+    echo html_writer::start_tag('center');
+    echo html_writer::tag('a', 'Show All My Presentations', ['href' => '#' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56
+    ; border-color: #3F2A56; padding:12px 20px 12px 20px; margin-top: 10px;']);
+    echo html_writer::end_tag('center');
+
 }
 else {
     echo html_writer::start_tag('center');
@@ -55,7 +71,9 @@ else {
     echo html_writer::end_tag('center');
 }
 
-echo html_writer::tag('h3', 'Shared presentations');
+echo html_writer::tag('br', '');
+
+echo html_writer::tag('h3', 'Shared Presentations');
 
 if (count($sharedpresentations) > 0) {
     echo $OUTPUT->box_start('card-columns');
@@ -65,6 +83,7 @@ if (count($sharedpresentations) > 0) {
         $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $sharedpres->name . '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
+        echo html_writer::empty_tag('img', ['src' => 'https://picsum.photos/200/300', 'class' => 'card-img-top', 'alt' => 'Card image']);
         echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
         echo html_writer::tag('small', 'By ' . $sharedpres->firstname . ' ' . $sharedpres->lastname, ['class' => 'text-muted']);
         echo html_writer::start_tag('p', ['class' => 'card-text']);
@@ -81,10 +100,6 @@ else {
     echo html_writer::tag('p', 'No presentations shared with you for the moment.');
     echo html_writer::end_tag('center');
 }
-
-echo html_writer::start_tag('div', ['class' => 'new-pres']);
-echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; padding:12px 20px 12px 20px; margin-top: 10px;']);
-echo html_writer::end_tag('div');
 
 
 echo $OUTPUT->footer();
