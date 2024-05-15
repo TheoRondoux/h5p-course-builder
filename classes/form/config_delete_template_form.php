@@ -18,7 +18,7 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 namespace h5plib_poc_editor\form;
 
@@ -30,20 +30,20 @@ require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
 class config_delete_template_form extends \moodleform {
     public function definition() {
-        $mform = $this->_form;
+        $form = $this->_form;
 
-        $mform->addElement('html', '<h4>' . get_string('deletetemplatetitle', 'h5plib_poc_editor') . '</h4>');
+        $form->addElement('html', '<h4>' . get_string('deletetemplatetitle', 'h5plib_poc_editor') . '</h4>');
 
         $templates = h5p_poc_editor_get_added_templates();
         if (empty($templates)) {
-            $mform->addElement('html', '<center><p>' . get_string('notemplatetodelete', 'h5plib_poc_editor') . '</p></center>');
-        } 
-        else {
-            $templatesnames = h5p_poc_editor_get_templates_names($templates);
-            $mform->addElement('select', 'select_delete_template', get_string('selecttemplate', 'h5plib_poc_editor'), $templatesnames);
-            
-            $mform->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'));
+            $form->addElement('html', '<center><p>' . get_string('notemplatetodelete', 'h5plib_poc_editor') . '</p></center>');
+        } else {
+            $templatesNames = h5p_poc_editor_get_templates_names($templates);
+            $form->addElement('select', 'select_delete_template', get_string('selecttemplate', 'h5plib_poc_editor'),
+                    $templatesNames);
+
+            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'));
         }
-                
+
     }
 }

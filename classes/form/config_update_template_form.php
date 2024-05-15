@@ -18,7 +18,7 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 namespace h5plib_poc_editor\form;
 
@@ -30,22 +30,22 @@ require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
 class config_update_template_form extends \moodleform {
     public function definition() {
-        $mform = $this->_form;
+        $form = $this->_form;
 
-        $mform->addElement('html','<h4>' . get_string('updatetemplatestitle', 'h5plib_poc_editor') . '</h4>');
-        $updatabletemplates = h5p_poc_editor_get_updatable_templates();
-        if (!empty($updatabletemplates)) {
-            $mform->addElement('html','<center><p>' . get_string('updatabletemplatelisttitle', 'h5plib_poc_editor') . '</p></center>');
-            $mform->addElement('html','<ul>');
-            foreach ($updatabletemplates as $template) {
-                $mform->addElement('html','<li>' . $template->name . '</li>');
+        $form->addElement('html', '<h4>' . get_string('updatetemplatestitle', 'h5plib_poc_editor') . '</h4>');
+        $updatableTemplates = h5p_poc_editor_get_updatable_templates();
+        if (!empty($updatableTemplates)) {
+            $form->addElement('html',
+                    '<center><p>' . get_string('updatabletemplatelisttitle', 'h5plib_poc_editor') . '</p></center>');
+            $form->addElement('html', '<ul>');
+            foreach ($updatableTemplates as $template) {
+                $form->addElement('html', '<li>' . $template->name . '</li>');
             }
-            $mform->addElement('html','</ul>');
-    
-            $mform->addElement('submit', 'update_templates', get_string('updatenow', 'h5plib_poc_editor'));
-        }
-        else {
-            $mform->addElement('html','<center><p>' . get_string('nothingtoupdate', 'h5plib_poc_editor') . '</p></center>');
+            $form->addElement('html', '</ul>');
+
+            $form->addElement('submit', 'update_templates', get_string('updatenow', 'h5plib_poc_editor'));
+        } else {
+            $form->addElement('html', '<center><p>' . get_string('nothingtoupdate', 'h5plib_poc_editor') . '</p></center>');
         }
     }
 }
