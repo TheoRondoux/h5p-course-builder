@@ -173,9 +173,8 @@ function h5p_poc_editor_get_templates_names(array $templates): array {
     return $names;
 }
 
-function h5plib_poc_editor_display_all_presentations(array $presentations): void {
+function h5plib_poc_editor_display_all_presentations(array $presentations, stdClass $user): void {
     global $OUTPUT;
-    global $DB;
 
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
@@ -186,10 +185,13 @@ function h5plib_poc_editor_display_all_presentations(array $presentations): void
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
         echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
-        if ($presentation->shared == 1) {
+        if ($presentation->shared == 1 && $user->id == $presentation->userid) {
             echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
             echo html_writer::end_tag('center');
+        }
+        else if ($presentation->shared == 1) {
+            echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
         }
         echo html_writer::start_tag('p', ['class' => 'card-text']);
         echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
@@ -201,9 +203,8 @@ function h5plib_poc_editor_display_all_presentations(array $presentations): void
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_display_some_presentations(array $presentations, int $number = 5): void {
+function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 5): void {
     global $OUTPUT;
-    global $DB;
 
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
@@ -219,10 +220,13 @@ function h5plib_poc_editor_display_some_presentations(array $presentations, int 
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
         echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
-        if ($presentation->shared == 1) {
+        if ($presentation->shared == 1 && $user->id == $presentation->userid) {
             echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
             echo html_writer::end_tag('center');
+        }
+        else if ($presentation->shared == 1) {
+            echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
         }
         echo html_writer::start_tag('p', ['class' => 'card-text']);
         echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
