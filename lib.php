@@ -180,13 +180,12 @@ function h5plib_poc_editor_display_all_presentations(array $presentations): void
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
     foreach ($presentations as $presentation) {
-        $moduleid = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
-        $courseViewUrl =
-                '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid . "&forceview=1") . '">' . $presentation->name .
+        $detailsUrl =
+                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", array('id' => $presentation->id)) . '">' . $presentation->name .
                 '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $courseViewUrl, ['class' => 'card-text']);
+        echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
         if ($presentation->shared == 1) {
             echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
@@ -209,18 +208,17 @@ function h5plib_poc_editor_display_some_presentations(array $presentations, int 
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
     for ($i = 0; $i < $number; $i++) {
-        $presentationsarray = [];
+        $presentationsArray = [];
         foreach ($presentations as $pres) {
-            array_push($presentationsarray, $pres);
+            $presentationsArray[] = $pres;
         }
-        $presentation = $presentationsarray[$i];
-        $moduleId = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
-        $courseViewUrl =
-                '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleId . "&forceview=1") . '">' . $presentation->name .
+        $presentation = $presentationsArray[$i];
+        $detailsUrl =
+                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", array('id' => $presentation->id)) . '">' . $presentation->name .
                 '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $courseViewUrl, ['class' => 'card-text']);
+        echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
         if ($presentation->shared == 1) {
             echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
@@ -236,7 +234,7 @@ function h5plib_poc_editor_display_some_presentations(array $presentations, int 
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_generate_module(string $title, string $template, string $introduction, string $modulename): stdClass {
+function h5plib_poc_editor_generate_module(string $title, stdClass $template, string $introduction, string $modulename): stdClass {
     global $DB;
     $retrievedModule = $DB->get_record('modules', ['name' => $modulename]);
     if (empty($retrievedModule)) {

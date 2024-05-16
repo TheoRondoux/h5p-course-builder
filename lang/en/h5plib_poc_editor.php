@@ -78,3 +78,10 @@ $string['templatedeleted'] = "Template deleted successfully";
 $string['generalconfiguration'] = "General configuration";
 $string['notemplatecreated'] = "No template course found, do you want to create one?";
 $string['createcourse'] = "Create course";
+
+$string['details'] = "Details";
+$string['preview'] = "Preview";
+$string['createdat'] = "Created on ";
+$string['lastmodified'] = "Last modified on ";
+$string['relatedcourse'] = "Related to the course ";
+$string['by'] = "By";

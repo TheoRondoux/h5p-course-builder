@@ -84,13 +84,12 @@ if (count($sharedPresentations) > 0) {
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'shared-pres']);
     foreach ($sharedPresentations as $sharedpres) {
-        $moduleId = $DB->get_record('course_modules', ['instance' => $sharedpres->id])->id;
-        $courseViewUrl =
-                '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleId . "&forceview=1") . '">' . $sharedpres->name .
+        $sharedUrl =
+                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/shared.php", array('id' => $sharedpres->id)) . '">' . $sharedpres->name .
                 '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $courseViewUrl, ['class' => 'card-text']);
+        echo html_writer::tag('p', $sharedUrl, ['class' => 'card-text']);
         echo html_writer::tag('small', 'By ' . $sharedpres->firstname . ' ' . $sharedpres->lastname, ['class' => 'text-muted']);
         echo html_writer::start_tag('p', ['class' => 'card-text']);
         echo html_writer::tag('small', userdate($sharedpres->timecreated), ['class' => 'text-muted']);
