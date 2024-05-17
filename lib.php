@@ -214,28 +214,38 @@ function h5plib_poc_editor_display_some_presentations(array $presentations, stdC
             $presentationsArray[] = $pres;
         }
         $presentation = $presentationsArray[$i];
-        $detailsUrl =
-                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", array('id' => $presentation->id)) . '">' . $presentation->name .
-                '</a>';
-        echo html_writer::start_tag('div', ['class' => 'card']);
-        echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
-        if ($presentation->shared == 1 && $user->id == $presentation->userid) {
-            echo html_writer::start_tag('center');
-            echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
-            echo html_writer::end_tag('center');
-        }
-        else if ($presentation->shared == 1) {
-            echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
-        }
-        echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
-        echo html_writer::end_tag('p');
-        echo html_writer::end_tag('div');
-        echo html_writer::end_tag('div');
+        h5plib_poc_editor_display_card_from_presentation($presentation, $user);
     }
     echo html_writer::end_tag('div');
     echo $OUTPUT->box_end();
+}
+
+/**
+ * @param mixed $presentation
+ * @param stdClass $user
+ * @return void
+ * @throws moodle_exception
+ */
+function h5plib_poc_editor_display_card_from_presentation(mixed $presentation, stdClass $user): void {
+    $detailsUrl =
+            '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", ['id' => $presentation->id]) . '">' .
+            $presentation->name .
+            '</a>';
+    echo html_writer::start_tag('div', ['class' => 'card']);
+    echo html_writer::start_tag('div', ['class' => 'card-body']);
+    echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
+    if ($presentation->shared == 1 && $user->id == $presentation->userid) {
+        echo html_writer::start_tag('center');
+        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
+        echo html_writer::end_tag('center');
+    } else if ($presentation->shared == 1) {
+        echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
+    }
+    echo html_writer::start_tag('p', ['class' => 'card-text']);
+    echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
+    echo html_writer::end_tag('p');
+    echo html_writer::end_tag('div');
+    echo html_writer::end_tag('div');
 }
 
 function h5plib_poc_editor_generate_module(string $title, stdClass $template, string $introduction, string $modulename): stdClass {
@@ -337,4 +347,33 @@ function h5plib_poc_editor_no_access_redirect(stdClass $user): void {
     if (!is_siteadmin() && sizeof($teacherCourses) < 1) {
         h5plib_poc_editor_redirect_error(get_string('noteditingteacherinanycourse', 'h5plib_poc_editor'), '/');
     }
+}
+
+/**
+ * Allows to delete outdated enrolments from the database
+ *
+ * @param stdClass $user
+ * @return void
+ */
+function h5plib_poc_editor_delete_user_enrolments(stdClass $user): void {
+    global $DB;
+
+    $userId = $user->id;
+
+    $sql = "SELECT course.id
+        FROM {user_enrolments} userenrol
+        JOIN {enrol} enrol ON userenrol.enrolid = enrol.id
+        JOIN {course} course ON enrol.courseid = course.id
+        WHERE userenrol.userid = :userid
+        AND userenrol.timeend < :now and userenrol.timeend != 0";
+
+    $params = ['userid' => $userId, 'now' => time()];
+    $courseUtilisation = $DB->get_records_sql($sql, $params);
+
+    foreach ($courseUtilisation as $course) {
+        $enrolInstance = $DB->get_record('enrol', ['courseid' => $course->id, 'enrol' => 'manual']);
+        $enrolplugin = enrol_get_plugin($enrolInstance->enrol);
+        $enrolplugin->unenrol_user($enrolInstance, $userId);
+    }
+
 }

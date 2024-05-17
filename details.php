@@ -48,12 +48,16 @@ if (empty($presentationDetails)) {
 $moduleId = $DB->get_record('course_modules', ['instance' => $presentationId])->id;
 $relatedCourse = $DB->get_record('course', ['id' => $presentationDetails->course]);
 $presentationEditorInfo = $DB->get_record('h5plib_poc_editor_pres', ['presentationid' => $presentationId], 'shared, userid');
+
 if (!$presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->userid) {
     h5plib_poc_editor_redirect_error('You do not have permission to see this presentation');
+} else if ($presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->userid) {
+    $enrolInstance = $DB->get_record('enrol', ['courseid' => $relatedCourse->id, 'enrol' => 'manual']);
+    $enrolplugin = enrol_get_plugin($enrolInstance->enrol);
+    $enrolplugin->enrol_user($enrolInstance, $USER->id, $DB->get_record('role', ['shortname' => 'teacher'], 'id')->id, time(), strtotime('+1 minute', time()));
 }
+
 $author = $DB->get_record('user', ['id' => $presentationEditorInfo->userid], 'firstname, lastname');
-
-
 
 $PAGE->set_heading($relatedCourse->fullname);
 
@@ -79,7 +83,7 @@ echo html_writer::start_tag('div', ['class' => 'preview']);
 echo html_writer::tag('h3', get_string('preview', 'h5plib_poc_editor'));
 
 if ($presentationEditorInfo->userid == $USER->id) {
-    echo "<a href='" . $editUrl . "'>[Edit]</a>";
+    echo "<a href='" . $editUrl . "'>[" . get_string('edit', 'h5plib_poc_editor') . "]</a>";
 }
 
 echo '<iframe src="' . new moodle_url("/mod/hvp/embed.php?id=" . $moduleId) .
