@@ -67,9 +67,9 @@ echo html_writer::end_tag('div');
 echo html_writer::end_tag('div');
 
 echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_poc_editor'));
-if ($userPresentations && count($userPresentations) < 6) {
+if ($userPresentations && count($userPresentations) < 7) {
     h5plib_poc_editor_display_all_presentations($userPresentations, $USER);
-} else if ($userPresentations && count($userPresentations) > 5) {
+} else if ($userPresentations && count($userPresentations) > 6) {
     h5plib_poc_editor_display_some_presentations($userPresentations, $USER, 6);
     echo '<center><a href="presentations.php">' . get_string('showpresentations', 'h5plib_poc_editor') . '</a></center>';
 } else {
@@ -80,11 +80,11 @@ if ($userPresentations && count($userPresentations) < 6) {
 
 echo html_writer::tag('h3', get_string('sharedpresentationstitle', 'h5plib_poc_editor'));
 
-if ($sharedPresentations && count($sharedPresentations) < 6) {
+if ($sharedPresentations && count($sharedPresentations) < 7) {
     h5plib_poc_editor_display_all_presentations($sharedPresentations, $USER);
-} else if ($sharedPresentations && count($sharedPresentations) > 5) {
+} else if ($sharedPresentations && count($sharedPresentations) > 6) {
     h5plib_poc_editor_display_some_presentations($sharedPresentations, $USER, 6);
-    echo '<center><a href="presentations.php">' . get_string('showpresentations', 'h5plib_poc_editor') . '</a></center>';
+    echo '<center><a href="' . new moodle_url('presentations.php', ['type' => 'shared']) . '">' . get_string('showsharedpresentations', 'h5plib_poc_editor') . '</a></center>';
 } else {
     echo html_writer::start_tag('center');
     echo html_writer::tag('p', get_string('nosharedpresentations', 'h5plib_poc_editor'));
