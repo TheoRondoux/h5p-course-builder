@@ -55,6 +55,8 @@ if (is_siteadmin()) {
             get_string('settings', 'h5plib_poc_editor') . "]</a>";
 }
 
+h5plib_poc_editor_delete_user_enrolments($USER);
+
 echo html_writer::start_tag('div', ['class' => 'new-pres']);
 echo html_writer::start_tag('div', ['class' => 'card']);
 echo html_writer::start_tag('div', ['class' => 'card-body']);

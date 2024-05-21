@@ -86,3 +86,4 @@ $string['createdat'] = "Created on ";
 $string['lastmodified'] = "Last modified on ";
 $string['relatedcourse'] = "Related to the course ";
 $string['by'] = "By";
+$string['edit'] = "Edit";
