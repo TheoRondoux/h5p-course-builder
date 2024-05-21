@@ -71,7 +71,7 @@ if ($data = $createcourseform->get_data()) {
 
 echo $OUTPUT->header();
 $back_url = new moodle_url('/h5p/h5plib/poc_editor/');
-echo html_writer::tag('a', 'Back', ['href' => $back_url , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; padding:6px 15px 6px 15px; margin-top: 10px; border-color: #3F2A56;']);
+echo html_writer::tag('a', 'Back', ['href' => $back_url , 'role' => 'button','class' => 'btn back-btn btn-primary btn-sm']);
 
 $createcourseform->display();
 print_r($debugprint);

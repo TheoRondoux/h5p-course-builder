@@ -38,13 +38,15 @@ echo $OUTPUT->header();
 
 if (is_siteadmin()) {
     $settings_url = new moodle_url('/h5p/h5plib/poc_editor/configuration.php');
-    echo html_writer::tag('a', 'Settings', ['href' => $settings_url , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; border-color: #3F2A56; padding:8px 15px 8px 15px; margin-top: 10px;']);
+    echo html_writer::tag('a', 'Settings', ['href' => $settings_url ]);
 
 }
 echo html_writer::tag('br', '');
 
+// echo html_writer::start_tag('div');
 echo html_writer::start_tag('div', ['class' => 'd-grid gap-2 col-6 mx-auto']);
-echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'style' => ' background-color: #3F2A56; border-color: #3F2A56; padding:12px 20px 12px 20px;']);
+
+echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-block create-btn']);
 
 echo html_writer::end_tag('div');
 
@@ -60,8 +62,7 @@ else if ($userpresentations && count($userpresentations) > 5) {
     h5plib_poc_editor_display_some_presentations($userpresentations, 6);
 
     echo html_writer::start_tag('center');
-    echo html_writer::tag('a', 'Show All My Presentations', ['href' => '#' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56
-    ; border-color: #3F2A56; padding:12px 20px 12px 20px; margin-top: 10px;']);
+    echo html_writer::tag('a', 'Show All My Presentations', ['href' => '#' , 'role' => 'button','class' => 'btn custom-btn']);
     echo html_writer::end_tag('center');
 
 }
@@ -71,13 +72,9 @@ else {
     echo html_writer::end_tag('center');
 }
 
-<<<<<<< HEAD
 echo html_writer::tag('br', '');
 
 echo html_writer::tag('h3', 'Shared Presentations');
-=======
-echo html_writer::tag('h4', 'My presentations');
->>>>>>> c067e85b88d2ad5d25d29cc710265e073b7970c6
 
 if (count($sharedpresentations) > 0) {
     echo $OUTPUT->box_start('card-columns');
@@ -105,12 +102,5 @@ else {
     echo html_writer::end_tag('center');
 }
 
-<<<<<<< HEAD
-=======
-echo html_writer::start_tag('div', ['class' => 'new-pres']);
-echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-primary btn-sm', 'data-bs-toggle' => 'button', 'aria-pressed' => 'true', 'style' => ' background-color: #3F2A56; padding:12px 20px 12px 20px; margin-top: 10px;']);
-echo html_writer::end_tag('div');
-
->>>>>>> c067e85b88d2ad5d25d29cc710265e073b7970c6
 
 echo $OUTPUT->footer();
