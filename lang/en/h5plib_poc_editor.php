@@ -59,6 +59,7 @@ $string['mypresentationstitle'] = "My presentations";
 $string['createnewpresentation'] = "Create new presentation";
 $string['nopresentation'] = "No presentations created yet";
 $string['showpresentations'] = "Show all my presentations";
+$string['showsharedpresentations'] = "Show shared presentations";
 
 $string['sharedpresentationstitle'] = "Shared presentations";
 $string['nosharedpresentations'] = "No shared presentations created yet";
