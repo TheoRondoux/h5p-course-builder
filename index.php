@@ -52,7 +52,7 @@ $sharedPresentations =
 echo $OUTPUT->header();
 if (is_siteadmin()) {
     $settings_url = new moodle_url('/h5p/h5plib/poc_editor/configuration.php');
-    echo html_writer::tag('a', get_string('settings', 'h5plib_poc_editor'), ['href' => $settings_url ]);
+    echo html_writer::tag('a', get_string('settings', 'h5plib_poc_editor'), ['href' => $settings_url]);
 
 }
 
@@ -60,7 +60,8 @@ h5plib_poc_editor_delete_user_enrolments($USER);
 echo html_writer::tag('br', '');
 
 echo html_writer::start_tag('div', ['class' => 'd-grid gap-2 col-6 mx-auto']);
-echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'), ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-block create-btn']);
+echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'),
+        ['href' => 'creation_form.php', 'role' => 'button', 'class' => 'btn btn-block create-btn']);
 echo html_writer::end_tag('div');
 echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_poc_editor'));
@@ -82,12 +83,12 @@ if ($sharedPresentations && count($sharedPresentations) < 7) {
     h5plib_poc_editor_display_all_presentations($sharedPresentations, $USER);
 } else if ($sharedPresentations && count($sharedPresentations) > 6) {
     h5plib_poc_editor_display_some_presentations($sharedPresentations, $USER, 6);
-    echo '<center><a href="' . new moodle_url('presentations.php', ['type' => 'shared']) . '">' . get_string('showsharedpresentations', 'h5plib_poc_editor') . '</a></center>';
+    echo '<center><a href="' . new moodle_url('presentations.php', ['type' => 'shared']) . '">' .
+            get_string('showsharedpresentations', 'h5plib_poc_editor') . '</a></center>';
 } else {
     echo html_writer::start_tag('center');
     echo html_writer::tag('p', get_string('nosharedpresentations', 'h5plib_poc_editor'));
     echo html_writer::end_tag('center');
 }
-
 
 echo $OUTPUT->footer();

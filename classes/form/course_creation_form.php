@@ -18,7 +18,7 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ */
 
 namespace h5plib_poc_editor\form;
 
@@ -82,6 +82,6 @@ class course_creation_form extends \moodleform {
         $courseCreationForm->addElement('advcheckbox', 'share_presentation', get_string('sharepresentation', 'h5plib_poc_editor'),
                 ' ', ['shared' => 1], [0, 1]);
         $courseCreationForm->addElement('submit', 'createpresentationsubmitbutton',
-                get_string('createpresentation', 'h5plib_poc_editor'), ['class' => 'custom-btn' ]);
+                get_string('createpresentation', 'h5plib_poc_editor'), ['class' => 'custom-btn']);
     }
 }

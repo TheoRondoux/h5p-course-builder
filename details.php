@@ -54,7 +54,8 @@ if (!$presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->us
 } else if ($presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->userid) {
     $enrolInstance = $DB->get_record('enrol', ['courseid' => $relatedCourse->id, 'enrol' => 'manual']);
     $enrolplugin = enrol_get_plugin($enrolInstance->enrol);
-    $enrolplugin->enrol_user($enrolInstance, $USER->id, $DB->get_record('role', ['shortname' => 'teacher'], 'id')->id, time(), strtotime('+1 minute', time()));
+    $enrolplugin->enrol_user($enrolInstance, $USER->id, $DB->get_record('role', ['shortname' => 'teacher'], 'id')->id, time(),
+            strtotime('+1 minute', time()));
 }
 
 $author = $DB->get_record('user', ['id' => $presentationEditorInfo->userid], 'firstname, lastname');

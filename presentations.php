@@ -52,15 +52,13 @@ if ($type == null) {
     $presentations =
             $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = ' .
                     $USER->id . ') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
-}
-else if ($type == 'shared') {
+} else if ($type == 'shared') {
     $pageTitle = 'sharedpresentationstitle';
     $presentations =
             $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.course, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' .
                     $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
-}
-else {
-    h5plib_poc_editor_redirect_error('Invalid type given.') ;
+} else {
+    h5plib_poc_editor_redirect_error('Invalid type given.');
 }
 
 $PAGE->set_heading(get_string($pageTitle, 'h5plib_poc_editor'));
