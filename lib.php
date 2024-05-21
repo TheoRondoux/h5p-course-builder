@@ -174,6 +174,7 @@ function h5p_poc_editor_get_templates_names(array $templates): array {
 }
 
 function h5plib_poc_editor_display_all_presentations(array $presentations, stdClass $user): void {
+
     global $OUTPUT;
 
     echo $OUTPUT->box_start('card-columns');
@@ -205,8 +206,6 @@ function h5plib_poc_editor_display_all_presentations(array $presentations, stdCl
 }
 
 function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 6): void {
-    global $OUTPUT;
-    global $DB;
     $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
     $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
 
@@ -249,7 +248,7 @@ function generate_presentation_card($presentations, $startIndex) {
         if (isset($presentationsarray[$j])) {
             $presentation = $presentationsarray[$j];
             $moduleid[$j] = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
-            $courseviewurl[$j] = '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid[$j] . "&forceview=1") . '">' . $presentation->name . '</a>';
+            $courseviewurl[$j] = '<a href="' . new moodle_url("details.php", ['id' => $presentation->id]) . '">' . $presentation->name . '</a>';
 
             echo html_writer::start_tag('div', ['class' => 'col-md-4 md-3']);
             generate_presentation_content($presentation, $courseviewurl[$j]); // Call the new sub function

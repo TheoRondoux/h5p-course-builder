@@ -59,7 +59,6 @@ if (is_siteadmin()) {
 h5plib_poc_editor_delete_user_enrolments($USER);
 echo html_writer::tag('br', '');
 
-// echo html_writer::start_tag('div');
 echo html_writer::start_tag('div', ['class' => 'd-grid gap-2 col-6 mx-auto']);
 echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'), ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-block create-btn']);
 echo html_writer::end_tag('div');
