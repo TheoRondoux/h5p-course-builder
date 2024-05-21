@@ -24,57 +24,64 @@ namespace h5plib_poc_editor\form;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once($CFG->dirroot. '/h5p/h5plib/poc_editor/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 
 class course_creation_form extends \moodleform {
     public function definition() {
-        global $DB;
+        global $USER;
 
-        $ccform = $this->_form;
-        $ccform->addElement('text', 'presentation_title', get_string('presentationtitle', 'h5plib_poc_editor'));
-        $ccform->setType('presentation_title', PARAM_TEXT);
-        $ccform->addRule(
-            'presentation_title', 
-            get_string('requieredpresentationtitle', 'h5plib_poc_editor'), 
-            'required',
-            '',
-            'client'
+        $courseCreationForm = $this->_form;
+        $courseCreationForm->addElement('text', 'presentation_title', get_string('presentationtitle', 'h5plib_poc_editor'));
+        $courseCreationForm->setType('presentation_title', PARAM_TEXT);
+        $courseCreationForm->addRule(
+                'presentation_title',
+                get_string('requieredpresentationtitle', 'h5plib_poc_editor'),
+                'required',
+                '',
+                'client'
         );
 
         $courses = h5p_poc_editor_get_courses();
-        $coursesname = [];
-        array_push($coursesname, get_string('selectcoursetext', 'h5plib_poc_editor'));
-        foreach ( $courses as $c ) {
-            array_push($coursesname, $c->fullname);
+        $teacherCourses = h5plib_poc_editor_check_if_teacher_in_courses($USER, $courses);
+        if (sizeof($teacherCourses) < 1) {
+            h5plib_poc_editor_redirect_error(get_string('noteditingteacherinanycourse', 'h5plib_poc_editor'));
         }
-        $ccform->addElement('select', 'course_select', get_string('coursechoice', 'h5plib_poc_editor'), $coursesname );
-        $ccform->addRule(
-            'course_select', 
-            get_string('requieredcoursechoice', 'h5plib_poc_editor'), 
-            'required',
-            '',
-            'client'
-        );
-        // TODO: Find how to use the compare type for the addRule() function. 
-        // One way: using an attribute directly in the element and not the rule like so:
-        // $form->addElement('select', 'iselTest', 'Test Select:', $arrayOfOptions, array('onchange' => 'javascript:myFunctionToDoSomething();')); 
 
-        $rowtemplates = h5p_poc_editor_get_added_templates();
-        $templatesnames = h5p_poc_editor_get_templates_names($rowtemplates);
+        $coursesNames = [];
+        $coursesNames[] = get_string('selectcoursetext', 'h5plib_poc_editor');
+        foreach ($teacherCourses as $course) {
+            $coursesNames[] = $course->fullname;
+        }
 
-        $ccform->addElement('select', 'template_select', get_string('selecttemplate', 'h5plib_poc_editor'),$templatesnames);
-        $ccform->addRule(
-            'template_select',
-            get_string('requiredtemplatechoice', 'h5plib_poc_editor'),
-            'required',
-            '',
-            'client'
+        $courseCreationForm->addElement('select', 'course_select', get_string('coursechoice', 'h5plib_poc_editor'), $coursesNames);
+        $courseCreationForm->addRule(
+                'course_select',
+                get_string('requieredcoursechoice', 'h5plib_poc_editor'),
+                'required',
+                '',
+                'client'
         );
 
-        $ccform->addElement('textarea', 'presentation_intro', get_string('presentationintro', 'h5plib_poc_editor'),'wrap="virtual" rows="7" cols="20"');
-        $ccform->addElement('advcheckbox', 'share_presentation', get_string('sharepresentation', 'h5plib_poc_editor'), ' ', array('shared' => 1), array(0,1));
-        $ccform->addElement('submit', 'createpresentationsubmitbutton', get_string('createpresentation', 'h5plib_poc_editor'), ['class' => 'custom-btn' ]);
+        $rowTemplates = h5p_poc_editor_get_added_templates();
+        $templatesNames = h5p_poc_editor_get_templates_names($rowTemplates);
 
+        $courseCreationForm->addElement('select', 'template_select', get_string('selecttemplate', 'h5plib_poc_editor'),
+                $templatesNames);
+        $courseCreationForm->addRule(
+                'template_select',
+                get_string('requiredtemplatechoice', 'h5plib_poc_editor'),
+                'required',
+                '',
+                'client'
+        );
+
+        $courseCreationForm->addElement('textarea', 'presentation_intro', get_string('presentationintro', 'h5plib_poc_editor'),
+                'wrap="virtual" rows="7" cols="20"');
+        $courseCreationForm->addElement('advcheckbox', 'share_presentation', get_string('sharepresentation', 'h5plib_poc_editor'),
+                ' ', ['shared' => 1], [0, 1]);
+        $courseCreationForm->addElement('submit', 'createpresentationsubmitbutton',
+                get_string('createpresentation', 'h5plib_poc_editor'), ['class' => 'custom-btn' ]);
     }
 }

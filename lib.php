@@ -21,110 +21,135 @@
  * @category    string
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ *
+ * @var admin_root $ADMIN
+ * @var moodle_page $PAGE
+ * @var moodle_database $DB
+ * @var stdClass $CFG
+ * @var site $SITE
+ * @var stdClass $USER
+ * @var core_renderer $OUTPUT
+ */
 
-function h5p_poc_editor_get_courses() {
+use core_analytics\site;
+
+function h5plib_poc_editor_extend_navigation_frontpage(navigation_node $frontpage) {
+    $frontpage->add(
+            get_string('pluginname', 'h5plib_poc_editor'),
+            new moodle_url('/h5p/h5plib/poc_editor/index.php'),
+            navigation_node::TYPE_CUSTOM,
+            'poceditor',
+            2
+    );
+}
+
+function h5p_poc_editor_get_courses(): array {
     global $DB;
     $courses = [];
     $retrievedcourses = $DB->get_records('course');
-    foreach($retrievedcourses as $course) {
+    foreach ($retrievedcourses as $course) {
         if ($course->id > 1 && $course->shortname != 'poceditor') {
-            array_push($courses, $course);
+            $courses[] = $course;
         }
     }
     return $courses;
 }
 
-function h5p_poc_editor_find_course($selectedcourseindex, $courses){
+/**
+ * @param int $selectedcourseindex The index of the course in the select HTML elem
+ * @param array $courses All the courses
+ *
+ * @return stdClass The wanted course
+ */
+function h5p_poc_editor_find_course(int $selectedcourseindex, array $courses): stdClass {
     return $courses[($selectedcourseindex - 1)];
 }
 
-function h5p_poc_editor_generate_slug($title) {
-    $slug = str_replace([' ', '(', ')', 'é', 'è', 'à', 'ç', 'ù'], ['-', '', '', 'e', 'e', 'a', 'c', 'u'], $title);
-    return $slug;
+/**
+ * @return stdClass The course where templates can be added
+ */
+function h5p_poc_editor_get_template_course(): stdClass {
+    global $DB;
+    return $DB->get_record('course', ['shortname' => 'poceditor']);
 }
 
-function h5p_poc_editor_get_template_course() {
+/**
+ * @return array All the templates usable for creating templates
+ * */
+function h5p_poc_editor_get_added_templates(): array {
     global $DB;
-    $templatecourse = $DB->get_record('course', ['shortname' => 'poceditor']);
-    return $templatecourse;
+    return $DB->get_records('h5plib_poc_editor_template');
 }
 
-function h5p_poc_editor_get_added_templates() {
+function h5p_poc_editor_get_available_templates(array $addedTemplates, int $templateCourseId): array {
     global $DB;
-    $addedtemplates = $DB->get_records('h5plib_poc_editor_template');
-    return $addedtemplates;
-}
-
-function h5p_poc_editor_get_available_templates($addedtemplates, $templatecourseid) {
-    global $DB;
-    $availabletemplates = [];
-    $importedtemplates = $DB->get_records('hvp', ['course' => $templatecourseid]);
-    if ($addedtemplates) {
-        foreach ($importedtemplates as $importedtemplate) {
+    $availableTemplates = [];
+    $importedTemplates = $DB->get_records('hvp', ['course' => $templateCourseId]);
+    if ($addedTemplates) {
+        foreach ($importedTemplates as $importedTemplate) {
             $added = false;
-            foreach ($addedtemplates as $addedtemplate) {
-                if ($addedtemplate->presentationid == $importedtemplate->id) {
+            foreach ($addedTemplates as $addedTemplate) {
+                if ($addedTemplate->presentationid == $importedTemplate->id) {
                     $added = true;
                 }
             }
             if (!$added) {
-                array_push($availabletemplates, $importedtemplate);
+                $availableTemplates[] = $importedTemplate;
             }
         }
-    }
-    else {
-        foreach ($importedtemplates as $importedtemplate) {
-            array_push($availabletemplates, $importedtemplate);
+    } else {
+        foreach ($importedTemplates as $importedTemplate) {
+            $availableTemplates[] = $importedTemplate;
         }
     }
 
-    return $availabletemplates;
+    return $availableTemplates;
 }
 
-function h5p_poc_editor_get_updatable_templates() {
+/**
+ * @return array The templates that have been updated in the course but not in the plugin
+ */
+function h5p_poc_editor_get_updatable_templates(): array {
     global $DB;
-    $updatabletemplates = $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified < mdl_hvp.timemodified)');
-    return $updatabletemplates;
+    return $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_template WHERE mdl_h5plib_poc_editor_template.timemodified < mdl_hvp.timemodified)');
 }
 
-function h5p_poc_editor_find_template($index) {
+function h5p_poc_editor_find_template(int $index): stdClass {
     global $DB;
-    $templateinfos = new stdClass();
-    
-    $gottemplates = $DB->get_records('h5plib_poc_editor_template');
+    $templateInfos = new stdClass();
+
+    $result = $DB->get_records('h5plib_poc_editor_template');
     $templates = [];
-    foreach ($gottemplates as $gottemplate) {
-        array_push($templates, $gottemplate);
+    foreach ($result as $template) {
+        $templates[] = $template;
     }
 
     $retrieved_selected_template = $templates[($index)];
-
     $retrieved_hvp_template = $DB->get_record('hvp', ['id' => $retrieved_selected_template->presentationid]);
-    
-    $templateinfos->json_content = $retrieved_hvp_template->json_content;
-    
-    $templatelib = $DB->get_record('hvp_libraries', ['id' => $retrieved_hvp_template->main_library_id]);
-    
-    $templatelibdesc = $templatelib->machine_name . ' ' . $templatelib->major_version . '.' . $templatelib->minor_version;
-    
-    $templateinfos->library = $templatelibdesc;
-    $templateinfos->id = $retrieved_selected_template->id;
-    
-    return $templateinfos;
+
+    $templateInfos->json_content = $retrieved_hvp_template->json_content;
+
+    $templateLib = $DB->get_record('hvp_libraries', ['id' => $retrieved_hvp_template->main_library_id]);
+
+    $templateLibDesc = $templateLib->machine_name . ' ' . $templateLib->major_version . '.' . $templateLib->minor_version;
+
+    $templateInfos->library = $templateLibDesc;
+    $templateInfos->id = $retrieved_selected_template->id;
+
+    return $templateInfos;
 }
 
-function h5p_poc_editor_update_templates($templates) {
+function h5p_poc_editor_update_templates(array $templates): bool {
     global $DB;
     if (!empty($templates)) {
         foreach ($templates as $template) {
-            $templateid = $DB->get_record_sql("SELECT id FROM mdl_h5plib_poc_editor_template WHERE presentationid = ". $template->id);
-            
+            $templateId =
+                    $DB->get_record_sql("SELECT id FROM mdl_h5plib_poc_editor_template WHERE presentationid = " . $template->id);
             $dataToUpdate = new stdClass();
-            $dataToUpdate->id = $templateid->id;
+            $dataToUpdate->id = $templateId->id;
             $dataToUpdate->json_content = $template->json_content;
             $dataToUpdate->timemodified = $template->timemodified;
-            
+
             $success = $DB->update_record('h5plib_poc_editor_template', $dataToUpdate);
             if (!$success) {
                 return false;
@@ -132,42 +157,45 @@ function h5p_poc_editor_update_templates($templates) {
         }
         return true;
     }
+    return false;
 }
 
-function h5p_poc_editor_get_templates_names($templates) {
+function h5p_poc_editor_get_templates_names(array $templates): array {
     global $DB;
     $names = [];
     foreach ($templates as $template) {
-        $templaterecord = $DB->get_record('hvp', ['id' => $template->presentationid]);
-        if (!empty($templaterecord)) {
-            array_push($names, $templaterecord->name);
+        $templateRecord = $DB->get_record('hvp', ['id' => $template->presentationid]);
+        if (!empty($templateRecord)) {
+            $names[] = $templateRecord->name;
         }
     }
 
     return $names;
 }
 
-function h5plib_poc_editor_display_all_presentations($presentations) {
+function h5plib_poc_editor_display_all_presentations(array $presentations, stdClass $user): void {
     global $OUTPUT;
-    global $DB;
 
     echo $OUTPUT->box_start('card-columns');
     echo html_writer::start_tag('div', ['class' => 'user-pres']);
-    foreach ($presentations as $p) {
-        $moduleid = $DB->get_record('course_modules', ['instance' => $p->id])->id;
-        $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $p->name . '</a>';
-        $courseediturl = '<a href="'.new moodle_url("/course/modedit.php?update=".$moduleid."&return=1").'">[Edit]</a>';
+    foreach ($presentations as $presentation) {
+        $detailsUrl =
+                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", array('id' => $presentation->id)) . '">' . $presentation->name .
+                '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
         echo html_writer::empty_tag('img', ['src' => 'https://picsum.photos/200/300', 'class' => 'card-img-top', 'alt' => 'Card image']);
-        echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
-        if ($p->shared == 1) {
+        echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
+        if ($presentation->shared == 1 && $user->id == $presentation->userid) {
             echo html_writer::start_tag('center');
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
             echo html_writer::end_tag('center');
         }
+        else if ($presentation->shared == 1) {
+            echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
+        }
         echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($p->timecreated), ['class' => 'text-muted']);
+        echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
         echo html_writer::end_tag('p');
         echo html_writer::end_tag('div');
         echo html_writer::end_tag('div');
@@ -176,15 +204,15 @@ function h5plib_poc_editor_display_all_presentations($presentations) {
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_display_some_presentations($presentations, $number = 6) {
+function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 6): void {
     global $OUTPUT;
     global $DB;
     $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
     $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
-  
+
     echo html_writer::start_tag('section', ['class' => 'pt-5 pb-5']);
         echo html_writer::start_tag('div', ['class' => 'container']);
-            echo html_writer::start_tag('div', ['class' => 'row']);        
+            echo html_writer::start_tag('div', ['class' => 'row']);
                 echo html_writer::start_tag('div', ['class' => 'col-12 text-right']);
                     echo html_writer::tag('a', $carousel_nav_icon_left, ['href' => '#carouselExampleIndicators', 'class' => 'btn mb-3 mr-1 custom-btn', 'data-slide' => 'prev']);
                     echo html_writer::tag('a', $carousel_nav_icon_right, ['href' => '#carouselExampleIndicators', 'class' => 'btn  mb-3 custom-btn', 'data-slide' => 'next']);
@@ -197,76 +225,208 @@ function h5plib_poc_editor_display_some_presentations($presentations, $number = 
 
 function generate_carousel($presentations, $number = 6) {
     echo html_writer::start_tag('div', ['class' => 'col-12']);
-        echo html_writer::start_tag('div', ['id' => 'carouselExampleIndicators', 'class' => 'carousel slide', 'data-bs-interval' => 'false', 'data-interval' => 'false']);
-            echo html_writer::start_tag('div', ['class' => 'carousel-inner']);
-        
-            for ($i = 0; $i < $number; $i += 3) {
-            echo generate_presentation_card($presentations, $i);
-            }
-            echo html_writer::end_tag('div'); // carousel-inner
-        echo html_writer::end_tag('div'); // carousel slide
+    echo html_writer::start_tag('div', ['id' => 'carouselExampleIndicators', 'class' => 'carousel slide', 'data-bs-interval' => 'false', 'data-interval' => 'false']);
+    echo html_writer::start_tag('div', ['class' => 'carousel-inner']);
+
+    for ($i = 0; $i < $number; $i += 3) {
+        echo generate_presentation_card($presentations, $i);
+    }
+    echo html_writer::end_tag('div'); // carousel-inner
+    echo html_writer::end_tag('div'); // carousel slide
     echo html_writer::end_tag('div'); // col-12
 }
 
 function generate_presentation_card($presentations, $startIndex) {
     global $DB;
-    
+
     $presentationsarray = [];
     foreach ($presentations as $pres) {
-      array_push($presentationsarray, $pres);
+        array_push($presentationsarray, $pres);
     }
     echo html_writer::start_tag('div', ['class' => 'carousel-item' . ($startIndex === 0 ? ' active' : '')]);
-        echo html_writer::start_tag('div', ['class' => 'row']);
-            for ($j = $startIndex; $j < $startIndex + 3; $j++) {
-                if (isset($presentationsarray[$j])) {
-                    $presentation = $presentationsarray[$j];
-                    $moduleid[$j] = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
-                    $courseviewurl[$j] = '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid[$j] . "&forceview=1") . '">' . $presentation->name . '</a>';
+    echo html_writer::start_tag('div', ['class' => 'row']);
+    for ($j = $startIndex; $j < $startIndex + 3; $j++) {
+        if (isset($presentationsarray[$j])) {
+            $presentation = $presentationsarray[$j];
+            $moduleid[$j] = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
+            $courseviewurl[$j] = '<a href="' . new moodle_url("/mod/hvp/view.php?id=" . $moduleid[$j] . "&forceview=1") . '">' . $presentation->name . '</a>';
 
-                    echo html_writer::start_tag('div', ['class' => 'col-md-4 md-3']);
-                        generate_presentation_content($presentation, $courseviewurl[$j]); // Call the new sub function
-                    echo html_writer::end_tag('div'); // col-md-4 md-3
-                }
-            }
-        echo html_writer::end_tag('div'); // row
+            echo html_writer::start_tag('div', ['class' => 'col-md-4 md-3']);
+            generate_presentation_content($presentation, $courseviewurl[$j]); // Call the new sub function
+            echo html_writer::end_tag('div'); // col-md-4 md-3
+        }
+    }
+    echo html_writer::end_tag('div'); // row
     echo html_writer::end_tag('div'); // carousel-item
-  }
+}
 
-  function generate_presentation_content($presentation, $courseviewurl) {
+function generate_presentation_content($presentation, $courseviewurl) {
     echo html_writer::start_tag('div', ['class' => 'card']);
-        echo html_writer::empty_tag('img', ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698', 'class' => 'card-img-top', 'alt' => 'Card image']);
-        echo html_writer::start_tag('div', ['class' => 'card-body']);
-            echo html_writer::tag('h5', $courseviewurl, ['class' => 'card-title']);
-            echo html_writer::tag('p', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', ['class' => 'card-text']); // Replace with actual description from $presentation
-        echo html_writer::end_tag('div'); // card-body
-        echo html_writer::start_tag('div', ['class' => 'card-footer']);
-            echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-body-secondary']);
-        echo html_writer::end_tag('div'); // card-footer
+    echo html_writer::empty_tag('img', ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698', 'class' => 'card-img-top', 'alt' => 'Card image']);
+    echo html_writer::start_tag('div', ['class' => 'card-body']);
+    echo html_writer::tag('h5', $courseviewurl, ['class' => 'card-title']);
+    echo html_writer::tag('p', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit', ['class' => 'card-text']); // Replace with actual description from $presentation
+    echo html_writer::end_tag('div'); // card-body
+    echo html_writer::start_tag('div', ['class' => 'card-footer']);
+    echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-body-secondary']);
+    echo html_writer::end_tag('div'); // card-footer
     echo html_writer::end_tag('div'); // card
-  }
-  
+}
+
+/**
+ * @param mixed $presentation
+ * @param stdClass $user
+ * @return void
+ * @throws moodle_exception
+ */
+function h5plib_poc_editor_display_card_from_presentation(mixed $presentation, stdClass $user): void {
+    $detailsUrl =
+            '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", ['id' => $presentation->id]) . '">' .
+            $presentation->name .
+            '</a>';
+    echo html_writer::start_tag('div', ['class' => 'card']);
+    echo html_writer::start_tag('div', ['class' => 'card-body']);
+    echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
+    if ($presentation->shared == 1 && $user->id == $presentation->userid) {
+        echo html_writer::start_tag('center');
+        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
+        echo html_writer::end_tag('center');
+    } else if ($presentation->shared == 1) {
+        echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
+    }
+    echo html_writer::start_tag('p', ['class' => 'card-text']);
+    echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
+    echo html_writer::end_tag('p');
+    echo html_writer::end_tag('div');
+    echo html_writer::end_tag('div');
+}
+
 function h5plib_poc_editor_generate_module($title, $template, $introduction, $modulename) {
     global $DB;
-    $retrivedmodule = $DB->get_record('modules', ['name' => $modulename]);
-    if (empty($retrivedmodule)) {
-        throw new ErrorException('The module "'.$modulename.'" does not exist.');
+    $retrievedModule = $DB->get_record('modules', ['name' => $modulename]);
+    if (empty($retrievedModule)) {
+        throw new ErrorException('The module "' . $modulename . '" does not exist.');
     }
 
-    $newmodule = new stdClass();
-    $newmodule->module = $retrivedmodule->id;
-    $newmodule->visible = 1;
-    $newmodule->visibleoncoursepage = 1;
-    $newmodule->instance = 0;
-    $newmodule->section = 3;
-    $newmodule->modulename = $modulename;
-    $newmodule->name = $title;
-    $newmodule->introformat = 1;
-    $newmodule->params = $template->json_content;
-    $newmodule->h5plibrary = $template->library;
-    $newmodule->metadata = "";
-    $newmodule->intro = $introduction;
-    $newmodule->cmidnumber = 0;
-    $newmodule->h5paction = 'create';
+    $newModule = new stdClass();
+    $newModule->module = $retrievedModule->id;
+    $newModule->visible = 1;
+    $newModule->visibleoncoursepage = 1;
+    $newModule->instance = 0;
+    $newModule->section = 3;
+    $newModule->modulename = $modulename;
+    $newModule->name = $title;
+    $newModule->introformat = 1;
+    $newModule->params = $template->json_content;
+    $newModule->h5plibrary = $template->library;
+    $newModule->metadata = "";
+    $newModule->intro = $introduction;
+    $newModule->cmidnumber = 0;
+    $newModule->h5paction = 'create';
 
-    return $newmodule;
+    return $newModule;
+}
+
+/**
+ * @param $user stdClass The user to check the role
+ * @return array an array of course ids
+ * */
+function h5plib_poc_editor_check_if_teacher_in_courses(stdClass $user, array $courses): array {
+    $user_id = $user->id;
+    $capability = 'moodle/course:update';
+    $modifiable_courses = [];
+    foreach ($courses as $course) {
+        if (has_capability($capability, context_course::instance($course->id), $user_id)) {
+            $modifiable_courses[] = $course;
+        }
+    }
+    return $modifiable_courses;
+}
+
+/**
+ * Custom error redirection according to the plugin needs
+ *
+ * @param string $message
+ * @param string $path
+ * @return void
+ */
+function h5plib_poc_editor_redirect_error(string $message, string $path = '/h5p/h5plib/poc_editor') {
+    $prefix = "[" . get_string('pluginname', 'h5plib_poc_editor') . "] Error: ";
+    redirect(new moodle_url($path),
+            $prefix . $message,
+            null,
+            \core\output\notification::NOTIFY_ERROR);
+
+}
+
+/**
+ * Custom success redirection according to the plugin needs
+ *
+ * @param string $message
+ * @return void
+ */
+function h5plib_poc_editor_redirect_success(string $message): void {
+    redirect(new moodle_url('/h5p/h5plib/poc_editor'),
+            $message,
+            null,
+            \core\output\notification::NOTIFY_SUCCESS);
+}
+
+function h5plib_poc_editor_is_enrolled_to_any_course($user): bool {
+    $courses = h5p_poc_editor_get_courses();
+    $isEnrolled = false;
+    foreach ($courses as $course) {
+        if (is_enrolled(context_course::instance($course->id), $user)) {
+            $isEnrolled = true;
+        }
+
+    }
+    return $isEnrolled;
+}
+
+/**
+ * Redirects the user if not enrolled in any course of if not editing teacher for any course
+ *
+ * @param stdClass $user
+ * @return void
+ */
+function h5plib_poc_editor_no_access_redirect(stdClass $user): void {
+    if (!is_siteadmin() && !h5plib_poc_editor_is_enrolled_to_any_course($user)) {
+        h5plib_poc_editor_redirect_error(get_string('nocoursesenrolledin', 'h5plib_poc_editor'), '/');
+    }
+
+    $courses = h5p_poc_editor_get_courses();
+    $teacherCourses = h5plib_poc_editor_check_if_teacher_in_courses($user, $courses);
+    if (!is_siteadmin() && sizeof($teacherCourses) < 1) {
+        h5plib_poc_editor_redirect_error(get_string('noteditingteacherinanycourse', 'h5plib_poc_editor'), '/');
+    }
+}
+
+/**
+ * Allows to delete outdated enrolments from the database
+ *
+ * @param stdClass $user
+ * @return void
+ */
+function h5plib_poc_editor_delete_user_enrolments(stdClass $user): void {
+    global $DB;
+
+    $userId = $user->id;
+
+    $sql = "SELECT course.id
+        FROM {user_enrolments} userenrol
+        JOIN {enrol} enrol ON userenrol.enrolid = enrol.id
+        JOIN {course} course ON enrol.courseid = course.id
+        WHERE userenrol.userid = :userid
+        AND userenrol.timeend < :now and userenrol.timeend != 0";
+
+    $params = ['userid' => $userId, 'now' => time()];
+    $courseUtilisation = $DB->get_records_sql($sql, $params);
+
+    foreach ($courseUtilisation as $course) {
+        $enrolInstance = $DB->get_record('enrol', ['courseid' => $course->id, 'enrol' => 'manual']);
+        $enrolplugin = enrol_get_plugin($enrolInstance->enrol);
+        $enrolplugin->unenrol_user($enrolInstance, $userId);
+    }
+
 }

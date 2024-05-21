@@ -18,11 +18,22 @@
  * @package     h5plib_poc_editor
  * @copyright   2024 - Théo Rondoux
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ *
+ * @var admin_root $ADMIN
+ * @var moodle_page $PAGE
+ * @var moodle_database $DB
+ * @var stdClass $CFG
+ * @var site $SITE
+ * @var stdClass $USER
+ * @var core_renderer $OUTPUT
+ */
+
+use core_analytics\site;
 
 require_once('../../../config.php');
 require_once('./lib.php');
 require_login();
+h5plib_poc_editor_no_access_redirect($USER);
 
 $context = context_system::instance();
 $PAGE->set_context($context);
@@ -31,74 +42,51 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('pluginname', 'h5plib_poc_editor'));
 
-$userpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = '.$USER->id.') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
-$sharedpresentations = $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' . $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
+$userPresentations =
+        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = ' .
+                $USER->id . ') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
+$sharedPresentations =
+        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.course, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' .
+                $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
 
 echo $OUTPUT->header();
-
 if (is_siteadmin()) {
     $settings_url = new moodle_url('/h5p/h5plib/poc_editor/configuration.php');
-    echo html_writer::tag('a', 'Settings', ['href' => $settings_url ]);
+    echo html_writer::tag('a', get_string('settings', 'h5plib_poc_editor'), ['href' => $settings_url ]);
 
 }
+
+h5plib_poc_editor_delete_user_enrolments($USER);
 echo html_writer::tag('br', '');
 
 // echo html_writer::start_tag('div');
 echo html_writer::start_tag('div', ['class' => 'd-grid gap-2 col-6 mx-auto']);
-
-echo html_writer::tag('a', 'Create New Presentation', ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-block create-btn']);
-
+echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'), ['href' => 'creation_form.php' , 'role' => 'button','class' => 'btn btn-block create-btn']);
 echo html_writer::end_tag('div');
-
 echo html_writer::tag('br', '');
-
-echo html_writer::tag('h4', 'My Presentations');
-
-
-if ($userpresentations && count($userpresentations) < 6) {
-    h5plib_poc_editor_display_all_presentations($userpresentations);
-} 
-else if ($userpresentations && count($userpresentations) > 5) {
-    h5plib_poc_editor_display_some_presentations($userpresentations, 6);
-
+echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_poc_editor'));
+if ($userPresentations && count($userPresentations) < 7) {
+    h5plib_poc_editor_display_all_presentations($userPresentations, $USER);
+} else if ($userPresentations && count($userPresentations) > 6) {
+    h5plib_poc_editor_display_some_presentations($userPresentations, $USER, 6);
+    echo '<center><a href="presentations.php">' . get_string('showpresentations', 'h5plib_poc_editor') . '</a></center>';
+} else {
     echo html_writer::start_tag('center');
-    echo html_writer::tag('a', 'Show All My Presentations', ['href' => '#' , 'role' => 'button','class' => 'btn custom-btn']);
-    echo html_writer::end_tag('center');
-
-}
-else {
-    echo html_writer::start_tag('center');
-    echo html_writer::tag('p', 'No presentations created yet');
+    echo html_writer::tag('p', get_string('nopresentation', 'h5plib_poc_editor'));
     echo html_writer::end_tag('center');
 }
 
 echo html_writer::tag('br', '');
+echo html_writer::tag('h3', get_string('sharedpresentationstitle', 'h5plib_poc_editor'));
 
-echo html_writer::tag('h3', 'Shared Presentations');
-
-if (count($sharedpresentations) > 0) {
-    echo $OUTPUT->box_start('card-columns');
-    echo html_writer::start_tag('div', ['class' => 'shared-pres']);
-    foreach($sharedpresentations as $sharedpres) {
-        $moduleid = $DB->get_record('course_modules', ['instance' => $sharedpres->id])->id;
-        $courseviewurl = '<a href="'.new moodle_url("/mod/hvp/view.php?id=".$moduleid."&forceview=1").'">' . $sharedpres->name . '</a>';
-        echo html_writer::start_tag('div', ['class' => 'card']);
-        echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::empty_tag('img', ['src' => 'https://picsum.photos/200/300', 'class' => 'card-img-top', 'alt' => 'Card image']);
-        echo html_writer::tag('p', $courseviewurl , ['class' => 'card-text']);
-        echo html_writer::tag('small', 'By ' . $sharedpres->firstname . ' ' . $sharedpres->lastname, ['class' => 'text-muted']);
-        echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($sharedpres->timecreated), ['class' => 'text-muted']);
-        echo html_writer::end_tag('p');
-        echo html_writer::end_tag('div');
-        echo html_writer::end_tag('div');
-    }
-    echo html_writer::end_tag('div');
-    echo $OUTPUT->box_end();
-}
-else {
+if ($sharedPresentations && count($sharedPresentations) < 7) {
+    h5plib_poc_editor_display_all_presentations($sharedPresentations, $USER);
+} else if ($sharedPresentations && count($sharedPresentations) > 6) {
+    h5plib_poc_editor_display_some_presentations($sharedPresentations, $USER, 6);
+    echo '<center><a href="' . new moodle_url('presentations.php', ['type' => 'shared']) . '">' . get_string('showsharedpresentations', 'h5plib_poc_editor') . '</a></center>';
+} else {
     echo html_writer::start_tag('center');
-    echo html_writer::tag('p', 'No presentations shared with you for the moment.');
+    echo html_writer::tag('p', get_string('nosharedpresentations', 'h5plib_poc_editor'));
     echo html_writer::end_tag('center');
 }
 
