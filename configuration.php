@@ -33,7 +33,7 @@ use core_analytics\site;
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot . '/course/lib.php');
-require_once('./lib.php');
+require_once('./libs/lib.php');
 require_login();
 if (!is_siteadmin()) {
     h5plib_poc_editor_redirect_error(get_string('noaccesstosettings', 'h5plib_poc_editor'));

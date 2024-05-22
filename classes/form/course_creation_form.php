@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/lib.php');
 
 class course_creation_form extends \moodleform {
     public function definition() {

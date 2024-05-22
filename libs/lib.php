@@ -184,22 +184,22 @@ function h5plib_poc_editor_display_all_presentations(array $presentations, stdCl
                 $presentation->name .
                 '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
-            echo html_writer::empty_tag('img',
-                    ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698',
-                    'class' => 'card-img-top', 'alt' => 'Card image']);
-            echo html_writer::start_tag('div', ['class' => 'card-body']);
-                echo html_writer::tag('h5', $detailsUrl, ['class' => 'card-title']);
-                echo html_writer::tag('p', 'This presentation is part of the '.$detailsUrl. ' course', ['class' => 'card-text']);
-                if ($presentation->shared == 1 && $user->id == $presentation->userid) {
-                        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
-                } else if ($presentation->shared == 1) {
-                    echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname,
-                            ['class' => 'text-muted'] );
-                }
-            echo html_writer::end_tag('div');
-        
+        echo html_writer::empty_tag('img',
+                ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698',
+                        'class' => 'card-img-top', 'alt' => 'Card image']);
+        echo html_writer::start_tag('div', ['class' => 'card-body']);
+        echo html_writer::tag('h5', $detailsUrl, ['class' => 'card-title']);
+        echo html_writer::tag('p', 'This presentation is part of the ' . $detailsUrl . ' course', ['class' => 'card-text']);
+        if ($presentation->shared == 1 && $user->id == $presentation->userid) {
+            echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
+        } else if ($presentation->shared == 1) {
+            echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname,
+                    ['class' => 'text-muted']);
+        }
+        echo html_writer::end_tag('div');
+
         echo html_writer::start_tag('div', ['class' => 'card-footer']);
-            echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
+        echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
         echo html_writer::end_tag('div');
         echo html_writer::end_tag('div'); // card
     }
@@ -252,7 +252,7 @@ function h5plib_poc_editor_generate_carousel(array $presentations, int $number =
  * @param array $presentations
  * @param int $startIndex
  */
-function h5plib_poc_editor_generate_presentation_card(array $presentations, int $startIndex, stdClass $user):void  {
+function h5plib_poc_editor_generate_presentation_card(array $presentations, int $startIndex, stdClass $user): void {
     global $DB;
 
     $presentationsarray = [];
@@ -281,25 +281,24 @@ function h5plib_poc_editor_generate_presentation_card(array $presentations, int 
  * Used to generate the content of a presentation,
  *
  * @param stdClass $presentations
- * @param  string $courseviewurl
+ * @param string $courseviewurl
  * @return void
  */
-function generate_presentation_content(stdClass $presentation, string $courseviewurl, stdClass $user): void{
+function generate_presentation_content(stdClass $presentation, string $courseviewurl, stdClass $user): void {
     echo html_writer::start_tag('div', ['class' => 'card']);
     echo html_writer::empty_tag('img',
             ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698',
                     'class' => 'card-img-top', 'alt' => 'Card image']);
     echo html_writer::start_tag('div', ['class' => 'card-body']);
     echo html_writer::tag('h5', $courseviewurl, ['class' => 'card-title']);
-    echo html_writer::tag('p', 'This presentation is part of the '.$courseviewurl. ' course', ['class' => 'card-text']);
+    echo html_writer::tag('p', 'This presentation is part of the ' . $courseviewurl . ' course', ['class' => 'card-text']);
     if ($presentation->shared == 1 && $user->id == $presentation->userid) {
-                    echo html_writer::start_tag('center');
-                        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
-                    echo html_writer::end_tag('center');
-                } else if ($presentation->shared == 1) {
-                    // echo print_r($presentation->firstname);
-                    echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname,['class' => 'text-muted'] );
-                }
+        echo html_writer::start_tag('center');
+        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
+        echo html_writer::end_tag('center');
+    } else if ($presentation->shared == 1) {
+        echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
+    }
     echo html_writer::end_tag('div'); // card-body
     echo html_writer::start_tag('div', ['class' => 'card-footer']);
     echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
