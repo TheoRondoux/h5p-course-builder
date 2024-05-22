@@ -54,36 +54,41 @@ if (!$presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->us
 } else if ($presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->userid) {
     $enrolInstance = $DB->get_record('enrol', ['courseid' => $relatedCourse->id, 'enrol' => 'manual']);
     $enrolplugin = enrol_get_plugin($enrolInstance->enrol);
-    $enrolplugin->enrol_user($enrolInstance, $USER->id, $DB->get_record('role', ['shortname' => 'teacher'], 'id')->id, time(), strtotime('+1 minute', time()));
+    $enrolplugin->enrol_user($enrolInstance, $USER->id, $DB->get_record('role', ['shortname' => 'teacher'], 'id')->id, time(),
+            strtotime('+1 minute', time()));
 }
 
 $author = $DB->get_record('user', ['id' => $presentationEditorInfo->userid], 'firstname, lastname');
 
-$PAGE->set_heading($relatedCourse->fullname);
+    $PAGE->set_heading($relatedCourse->fullname);
 
 $editUrl = new moodle_url("/course/modedit.php", ['update' => $moduleId, 'return' => 1]) . "#fgroup_id_h5peditor";
+$back_url = new moodle_url('/h5p/h5plib/poc_editor/');
 
-// What to display on the screen
 echo $OUTPUT->header();
+
+echo html_writer::start_tag('center');
 echo html_writer::tag('h4', $presentationDetails->name);
+echo html_writer::end_tag('center');
 if ($presentationEditorInfo->userid != $USER->id) {
     echo html_writer::tag('p', get_string('by', 'h5plib_poc_editor') . " " . $author->firstname . " " . $author->lastname);
 }
-echo "<a href='" . new moodle_url('/h5p/h5plib/poc_editor/') . "'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
-
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $back_url, 'role' => 'button', 'class' => 'btn back-btn']);
+echo html_writer::tag('br', '');
 if ($presentationEditorInfo->userid == $USER->id) {
     echo html_writer::start_tag('div', ['class' => 'details']);
-    echo html_writer::tag('h3', get_string('details', 'h5plib_poc_editor'));
+    echo html_writer::tag('h5', get_string('details', 'h5plib_poc_editor'));
     echo html_writer::tag('p', get_string('createdat', 'h5plib_poc_editor') . userdate($presentationDetails->timecreated));
     echo html_writer::tag('p', get_string('lastmodified', 'h5plib_poc_editor') . userdate($presentationDetails->timemodified));
     echo html_writer::end_tag('div');
 }
 
+echo html_writer::tag('br', '');
 echo html_writer::start_tag('div', ['class' => 'preview']);
-echo html_writer::tag('h3', get_string('preview', 'h5plib_poc_editor'));
+echo html_writer::tag('h5', get_string('preview', 'h5plib_poc_editor'));
 
 if ($presentationEditorInfo->userid == $USER->id) {
-    echo "<a href='" . $editUrl . "'>[" . get_string('edit', 'h5plib_poc_editor') . "]</a>";
+echo html_writer::tag('a', get_string('edit', 'h5plib_poc_editor'), ['href' => $editUrl, 'role' => 'button', 'class' => 'btn back-btn']);
 }
 
 echo '<iframe src="' . new moodle_url("/mod/hvp/embed.php?id=" . $moduleId) .

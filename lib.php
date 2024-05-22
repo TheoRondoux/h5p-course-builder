@@ -174,50 +174,137 @@ function h5p_poc_editor_get_templates_names(array $templates): array {
 }
 
 function h5plib_poc_editor_display_all_presentations(array $presentations, stdClass $user): void {
+
     global $OUTPUT;
 
     echo $OUTPUT->box_start('card-columns');
-    echo html_writer::start_tag('div', ['class' => 'user-pres']);
     foreach ($presentations as $presentation) {
         $detailsUrl =
-                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", array('id' => $presentation->id)) . '">' . $presentation->name .
+                '<a href="' . new moodle_url("/h5p/h5plib/poc_editor/details.php", ['id' => $presentation->id]) . '">' .
+                $presentation->name .
                 '</a>';
         echo html_writer::start_tag('div', ['class' => 'card']);
-        echo html_writer::start_tag('div', ['class' => 'card-body']);
-        echo html_writer::tag('p', $detailsUrl, ['class' => 'card-text']);
-        if ($presentation->shared == 1 && $user->id == $presentation->userid) {
-            echo html_writer::start_tag('center');
-            echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
-            echo html_writer::end_tag('center');
-        }
-        else if ($presentation->shared == 1) {
-            echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
-        }
-        echo html_writer::start_tag('p', ['class' => 'card-text']);
-        echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
-        echo html_writer::end_tag('p');
+            echo html_writer::empty_tag('img',
+                    ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698',
+                    'class' => 'card-img-top', 'alt' => 'Card image']);
+            echo html_writer::start_tag('div', ['class' => 'card-body']);
+                echo html_writer::tag('h5', $detailsUrl, ['class' => 'card-title']);
+                echo html_writer::tag('p', 'This presentation is part of the '.$detailsUrl. ' course', ['class' => 'card-text']);
+                if ($presentation->shared == 1 && $user->id == $presentation->userid) {
+                        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
+                } else if ($presentation->shared == 1) {
+                    echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname,
+                            ['class' => 'text-muted'] );
+                }
+            echo html_writer::end_tag('div');
+        
+        echo html_writer::start_tag('div', ['class' => 'card-footer']);
+            echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
         echo html_writer::end_tag('div');
-        echo html_writer::end_tag('div');
+        echo html_writer::end_tag('div'); // card
     }
-    echo html_writer::end_tag('div');
     echo $OUTPUT->box_end();
 }
 
-function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 5): void {
-    global $OUTPUT;
+function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 6): void {
+    $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
+    $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
 
-    echo $OUTPUT->box_start('card-columns');
-    echo html_writer::start_tag('div', ['class' => 'user-pres']);
-    for ($i = 0; $i < $number; $i++) {
-        $presentationsArray = [];
-        foreach ($presentations as $pres) {
-            $presentationsArray[] = $pres;
-        }
-        $presentation = $presentationsArray[$i];
-        h5plib_poc_editor_display_card_from_presentation($presentation, $user);
-    }
+    echo html_writer::start_tag('section', ['class' => 'pt-5 pb-5']);
+    echo html_writer::start_tag('div', ['class' => 'container']);
+    echo html_writer::start_tag('div', ['class' => 'row']);
+    echo html_writer::start_tag('div', ['class' => 'col-12 text-right']);
+    echo html_writer::tag('a', $carousel_nav_icon_left,
+            ['href' => '#carouselExampleIndicators', 'class' => 'btn mb-3 mr-1 custom-btn', 'data-slide' => 'prev']);
+    echo html_writer::tag('a', $carousel_nav_icon_right,
+            ['href' => '#carouselExampleIndicators', 'class' => 'btn  mb-3 custom-btn', 'data-slide' => 'next']);
     echo html_writer::end_tag('div');
-    echo $OUTPUT->box_end();
+    echo h5plib_poc_editor_generate_carousel($presentations, $number);
+    echo html_writer::end_tag('div'); // row
+    echo html_writer::end_tag('div'); // container
+    echo html_writer::end_tag('section');
+}
+
+/**
+ * Generates a carousel for a certain amount of presentations
+ *
+ * @param array $presentations
+ * @param int $number
+ */
+function h5plib_poc_editor_generate_carousel(array $presentations, int $number = 6): void {
+    echo html_writer::start_tag('div', ['class' => 'col-12']);
+    echo html_writer::start_tag('div',
+            ['id' => 'carouselExampleIndicators', 'class' => 'carousel slide', 'data-bs-interval' => 'false',
+                    'data-interval' => 'false']);
+    echo html_writer::start_tag('div', ['class' => 'carousel-inner']);
+
+    for ($i = 0; $i < $number; $i += 3) {
+        echo h5plib_poc_editor_generate_presentation_card($presentations, $i);
+    }
+    echo html_writer::end_tag('div'); // carousel-inner
+    echo html_writer::end_tag('div'); // carousel slide
+    echo html_writer::end_tag('div'); // col-12
+}
+
+/**
+ * Used to generate a card for some presentations, depending on the index
+ *
+ * @param array $presentations
+ * @param int $startIndex
+ */
+function h5plib_poc_editor_generate_presentation_card(array $presentations, int $startIndex):void  {
+    global $DB;
+
+    $presentationsarray = [];
+    foreach ($presentations as $pres) {
+        array_push($presentationsarray, $pres);
+    }
+    echo html_writer::start_tag('div', ['class' => 'carousel-item' . ($startIndex === 0 ? ' active' : '')]);
+    echo html_writer::start_tag('div', ['class' => 'row']);
+    for ($j = $startIndex; $j < $startIndex + 3; $j++) {
+        if (isset($presentationsarray[$j])) {
+            $presentation = $presentationsarray[$j];
+            $moduleid[$j] = $DB->get_record('course_modules', ['instance' => $presentation->id])->id;
+            $courseviewurl[$j] =
+                    '<a href="' . new moodle_url("details.php", ['id' => $presentation->id]) . '">' . $presentation->name . '</a>';
+
+            echo html_writer::start_tag('div', ['class' => 'col-md-4 md-3']);
+            generate_presentation_content($presentation, $courseviewurl[$j]); 
+            echo html_writer::end_tag('div'); // col-md-4 md-3
+        }
+    }
+    echo html_writer::end_tag('div'); // row
+    echo html_writer::end_tag('div'); // carousel-item
+}
+
+/**
+ * Used to generate the content of a presentation,
+ *
+ * @param stdClass $presentations
+ * @param  string $courseviewurl
+ * @return void
+ */
+function generate_presentation_content(stdClass $presentation, string $courseviewurl): void{
+    echo html_writer::start_tag('div', ['class' => 'card']);
+    echo html_writer::empty_tag('img',
+            ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698',
+                    'class' => 'card-img-top', 'alt' => 'Card image']);
+    echo html_writer::start_tag('div', ['class' => 'card-body']);
+    echo html_writer::tag('h5', $courseviewurl, ['class' => 'card-title']);
+    echo html_writer::tag('p', 'This presentation is part of the '.$courseviewurl. ' course', ['class' => 'card-text']);
+    if ($presentation->shared == 1 && $user->id == $presentation->userid) {
+                    echo html_writer::start_tag('center');
+                        echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
+                    echo html_writer::end_tag('center');
+                } else if ($presentation->shared == 1) {
+                    // echo print_r($presentation->firstname);
+                    echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname,['class' => 'text-muted'] );
+                }
+    echo html_writer::end_tag('div'); // card-body
+    echo html_writer::start_tag('div', ['class' => 'card-footer']);
+    echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
+    echo html_writer::end_tag('div'); // card-footer
+    echo html_writer::end_tag('div'); // card
 }
 
 /**
@@ -248,7 +335,7 @@ function h5plib_poc_editor_display_card_from_presentation(mixed $presentation, s
     echo html_writer::end_tag('div');
 }
 
-function h5plib_poc_editor_generate_module(string $title, stdClass $template, string $introduction, string $modulename): stdClass {
+function h5plib_poc_editor_generate_module($title, $template, $introduction, $modulename) {
     global $DB;
     $retrievedModule = $DB->get_record('modules', ['name' => $modulename]);
     if (empty($retrievedModule)) {

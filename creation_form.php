@@ -80,6 +80,8 @@ if ($data = $createCourseForm->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo "<a href='" . new moodle_url('/h5p/h5plib/poc_editor/') . "'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
+$back_url = new moodle_url('/h5p/h5plib/poc_editor/');
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $back_url, 'role' => 'button', 'class' => 'btn back-btn btn-primary btn-sm']);
+
 $createCourseForm->display();
 echo $OUTPUT->footer();

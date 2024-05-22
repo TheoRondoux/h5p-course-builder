@@ -46,7 +46,6 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('configtitle', 'h5plib_poc_editor'));
 
-
 $configForm = new \h5plib_poc_editor\form\config_form();
 $addTemplateForm = new \h5plib_poc_editor\form\config_add_template_form();
 $updateTemplateForm = new \h5plib_poc_editor\form\config_update_template_form();
@@ -123,7 +122,8 @@ if ($data = $deleteTemplateForm->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo "<a href='" . new moodle_url('/h5p/h5plib/poc_editor/') . "'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
+$settings_url = new moodle_url('/h5p/h5plib/poc_editor/');
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $settings_url, 'role' => 'button', 'class' => 'btn custom-btn btn-sm']);
 $configForm->display();
 echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
 $addTemplateForm->display();

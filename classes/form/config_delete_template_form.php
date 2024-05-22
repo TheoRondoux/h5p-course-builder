@@ -31,7 +31,6 @@ require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/lib.php');
 class config_delete_template_form extends \moodleform {
     public function definition() {
         $form = $this->_form;
-
         $form->addElement('html', '<h4>' . get_string('deletetemplatetitle', 'h5plib_poc_editor') . '</h4>');
 
         $templates = h5p_poc_editor_get_added_templates();
@@ -42,7 +41,8 @@ class config_delete_template_form extends \moodleform {
             $form->addElement('select', 'select_delete_template', get_string('selecttemplate', 'h5plib_poc_editor'),
                     $templatesNames);
 
-            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'));
+            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'),
+                    ['class' => 'custom-btn']);
         }
 
     }
