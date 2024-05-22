@@ -35,8 +35,8 @@ $string['requieredpresentationtitle'] = 'Please enter a title for your presentat
 $string['requieredcoursechoice'] = 'Please chose a course to link you presentation with.';
 $string['createpresentation'] = "Create presentation";
 $string['configtitle'] = "Poc Editor Settings";
-$string['selecttemplate'] = 'Chose a template';
-$string['requiredtemplatechoice'] = 'Please chose a template to use for your presentation.';
+$string['selecttemplate'] = 'Choose a template';
+$string['requiredtemplatechoice'] = 'Please choose a template to use for your presentation.';
 $string['settings'] = 'Settings';
 $string['back'] = 'Back';
 

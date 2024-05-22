@@ -44,6 +44,7 @@ $PAGE->set_url(new moodle_url('/h5p/h5plib/poc_editor/presentations.php'));
 $PAGE->set_pagelayout('standard');
 
 $type = optional_param('type', null, PARAM_TEXT);
+$back_url = new moodle_url('/h5p/h5plib/poc_editor/');
 
 $presentations = [];
 
@@ -65,6 +66,9 @@ $PAGE->set_heading(get_string($pageTitle, 'h5plib_poc_editor'));
 $PAGE->set_title(get_string($pageTitle, 'h5plib_poc_editor') . " " . $SITE->fullname);
 
 echo $OUTPUT->header();
-echo "<a href='" . new moodle_url('/h5p/h5plib/poc_editor/') . "'>[" . get_string('back', 'h5plib_poc_editor') . "]</a>";
+
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $back_url, 'role' => 'button', 'class' => 'btn custom-btn']);
+
+
 h5plib_poc_editor_display_all_presentations($presentations, $USER);
 echo $OUTPUT->footer();

@@ -43,8 +43,8 @@ $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fu
 $PAGE->set_heading(get_string('pluginname', 'h5plib_poc_editor'));
 
 $userPresentations =
-        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = ' .
-                $USER->id . ') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
+        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = ' .
+                $USER->id . ') AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ORDER BY mdl_hvp.timemodified DESC');
 $sharedPresentations =
         $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.course, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' .
                 $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
@@ -69,7 +69,10 @@ if ($userPresentations && count($userPresentations) < 7) {
     h5plib_poc_editor_display_all_presentations($userPresentations, $USER);
 } else if ($userPresentations && count($userPresentations) > 6) {
     h5plib_poc_editor_display_some_presentations($userPresentations, $USER, 6);
-    echo '<center><a href="presentations.php">' . get_string('showpresentations', 'h5plib_poc_editor') . '</a></center>';
+    echo html_writer::start_tag('center');
+    echo html_writer::tag('a', get_string('showpresentations', 'h5plib_poc_editor'),['href' => 'presentations.php', 'role' => 'button', 'class' => 'btn custom-btn']);
+    echo html_writer::end_tag('center');
+    
 } else {
     echo html_writer::start_tag('center');
     echo html_writer::tag('p', get_string('nopresentation', 'h5plib_poc_editor'));
