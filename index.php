@@ -32,7 +32,7 @@ use core_analytics\site;
 
 require_once('../../../config.php');
 require_once('./libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_lib.php');
 require_login();
 h5plib_poc_editor_no_access_redirect($USER);
 
@@ -68,7 +68,7 @@ h5plib_poc_editor_delete_user_enrolments($USER);
 echo html_writer::tag('br', '');
 
 echo html_writer::start_tag('center');
-echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'), get_create_btn_attributes());
+echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'), h5plib_poc_editor_get_create_btn_attributes());
 echo html_writer::end_tag('center');
 echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_poc_editor'));
@@ -76,13 +76,13 @@ if ($userPresentations && count($userPresentations) < 7) {
     h5plib_poc_editor_display_all_presentations($userPresentations, $USER);
 } else if ($userPresentations && count($userPresentations) > 6) {
     echo html_writer::start_tag('div', ['class' => 'col-12 text-right']);
-    echo html_writer::tag('a', $carousel_nav_icon_left, get_left_nav_btn_attributes());
-    echo html_writer::tag('a', $carousel_nav_icon_right, get_right_nav_btn_attributes());
+    echo html_writer::tag('a', $carousel_nav_icon_left, h5plib_poc_editor_get_left_nav_btn_attributes());
+    echo html_writer::tag('a', $carousel_nav_icon_right, h5plib_poc_editor_get_right_nav_btn_attributes());
 
     echo html_writer::end_tag('div');
     h5plib_poc_editor_display_some_presentations($userPresentations, $USER, 6);
     echo html_writer::start_tag('center');
-    echo html_writer::tag('a', get_string('showpresentations', 'h5plib_poc_editor'), get_presentation_btn_attributes());
+    echo html_writer::tag('a', get_string('showpresentations', 'h5plib_poc_editor'), h5plib_poc_editor_get_presentation_btn_attributes());
     echo html_writer::end_tag('center');
     
 } else {

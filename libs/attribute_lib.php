@@ -1,5 +1,5 @@
 <?php
-function get_back_btn_attributes() {
+function h5plib_poc_editor_get_back_btn_attributes() {
     $back_url = new moodle_url('/h5p/h5plib/poc_editor/');
     $attributes = array(
         'href' => $back_url,
@@ -20,7 +20,7 @@ function get_back_btn_attributes() {
     return $attributes;
 }
 
-function get_create_btn_attributes() {
+function h5plib_poc_editor_get_create_btn_attributes() {
     $attributes = array(
         'href' => 'creation_form.php',
         'role' => 'button',
@@ -36,7 +36,7 @@ function get_create_btn_attributes() {
     return $attributes;
 }
 
-function get_custom_btn_attributes() {
+function h5plib_poc_editor_get_custom_btn_attributes() {
     $attributes = array(
         'role' => 'button',
         'style' => 
@@ -50,7 +50,7 @@ function get_custom_btn_attributes() {
     return $attributes;
 }
 
-function get_presentation_btn_attributes() {
+function h5plib_poc_editor_get_presentation_btn_attributes() {
     $attributes = array(
         'href' => 'presentations.php',
         'role' => 'button',
@@ -67,7 +67,7 @@ function get_presentation_btn_attributes() {
 }
 
 
-function get_edit_btn_attributes($edit_url) {
+function h5plib_poc_editor_get_edit_btn_attributes($edit_url) {
     $attributes = array(
         'href' => $edit_url,
         'role' => 'button',
@@ -83,7 +83,7 @@ function get_edit_btn_attributes($edit_url) {
     return $attributes;
 }
 
-function get_left_nav_btn_attributes() {
+function h5plib_poc_editor_get_left_nav_btn_attributes() {
     $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
     $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
     $attributes = array(
@@ -102,7 +102,7 @@ function get_left_nav_btn_attributes() {
     return $attributes;
 }
 
-function get_right_nav_btn_attributes() {
+function h5plib_poc_editor_get_right_nav_btn_attributes() {
     $attributes = array(
         'href' => '#carouselExampleIndicators',
         'class' => 'btn mb-3',

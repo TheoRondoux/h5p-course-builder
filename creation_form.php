@@ -33,7 +33,7 @@ use core_analytics\site;
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_lib.php');
 require_login();
 h5plib_poc_editor_no_access_redirect($USER);
 
@@ -82,7 +82,7 @@ if ($data = $createCourseForm->get_data()) {
 }
 
 echo $OUTPUT->header();
-echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), get_back_btn_attributes());
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), h5plib_poc_editor_get_back_btn_attributes());
 
 $createCourseForm->display();
 echo $OUTPUT->footer();

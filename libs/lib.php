@@ -173,6 +173,13 @@ function h5p_poc_editor_get_templates_names(array $templates): array {
     return $names;
 }
 
+/**
+ * Used to display all the presentations in a list
+ *
+ * @param array $presentations
+ * @param stdClass $user
+ * @return void
+ */
 function h5plib_poc_editor_display_all_presentations(array $presentations, stdClass $user): void {
 
     global $OUTPUT;
@@ -206,6 +213,15 @@ function h5plib_poc_editor_display_all_presentations(array $presentations, stdCl
     echo $OUTPUT->box_end();
 }
 
+
+/**
+ * Used to display some presentations in a carousel
+ *
+ * @param array $presentations
+ * @param int $number
+ * @param stdClass $user
+ * @return void
+ */
 function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 6): void {
 
     echo html_writer::start_tag('section', ['class' => 'pt-5 pb-5']);
@@ -222,6 +238,8 @@ function h5plib_poc_editor_display_some_presentations(array $presentations, stdC
  *
  * @param array $presentations
  * @param int $number
+ * @param stdClass $user
+ * @return void
  */
 function h5plib_poc_editor_generate_carousel(array $presentations, int $number = 6, stdClass $user): void {
     echo html_writer::start_tag('div', ['class' => 'col-12']);
@@ -243,6 +261,8 @@ function h5plib_poc_editor_generate_carousel(array $presentations, int $number =
  *
  * @param array $presentations
  * @param int $startIndex
+ * @param stdClass $user
+ * @return void
  */
 function h5plib_poc_editor_generate_presentation_card(array $presentations, int $startIndex, stdClass $user): void {
     global $DB;
@@ -274,6 +294,7 @@ function h5plib_poc_editor_generate_presentation_card(array $presentations, int 
  *
  * @param stdClass $presentations
  * @param string $courseviewurl
+ * @param stdClass $user
  * @return void
  */
 function generate_presentation_content(stdClass $presentation, string $courseviewurl, stdClass $user): void {

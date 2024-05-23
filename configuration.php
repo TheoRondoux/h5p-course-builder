@@ -34,7 +34,7 @@ require_once('../../../config.php');
 require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot . '/course/lib.php');
 require_once('./libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_lib.php');
 
 require_login();
 if (!is_siteadmin()) {
@@ -126,7 +126,7 @@ if ($data = $deleteTemplateForm->get_data()) {
 
 echo $OUTPUT->header();
 echo html_writer::tag('br', '');
-echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), get_back_btn_attributes());
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), h5plib_poc_editor_get_back_btn_attributes());
 $configForm->display();
 echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
