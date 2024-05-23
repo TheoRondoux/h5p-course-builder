@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 
 class config_update_template_form extends \moodleform {
     public function definition() {
@@ -44,7 +44,8 @@ class config_update_template_form extends \moodleform {
             }
             $form->addElement('html', '</ul>');
 
-            $form->addElement('submit', 'update_templates', get_string('updatenow', 'h5plib_course_builder'), h5plib_course_builder_get_custom_btn_attributes());
+            $form->addElement('submit', 'update_templates', get_string('updatenow', 'h5plib_course_builder'),
+                    h5plib_course_builder_get_custom_btn_attributes());
         } else {
             $form->addElement('html', '<center><p>' . get_string('nothingtoupdate', 'h5plib_course_builder') . '</p></center>');
         }

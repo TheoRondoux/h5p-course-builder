@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 
 class config_delete_template_form extends \moodleform {
     public function definition() {
@@ -42,7 +42,8 @@ class config_delete_template_form extends \moodleform {
             $form->addElement('select', 'select_delete_template', get_string('selecttemplate', 'h5plib_course_builder'),
                     $templatesNames);
 
-            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_course_builder'), h5plib_course_builder_get_custom_btn_attributes());
+            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_course_builder'),
+                    h5plib_course_builder_get_custom_btn_attributes());
         }
 
     }

@@ -33,6 +33,13 @@
 
 use core_analytics\site;
 
+/**
+ * Used to display a button on the frontpage of the plugin
+ *
+ * @param navigation_node $frontpage
+ * @return void
+ * @throws coding_exception
+ */
 function h5plib_course_builder_extend_navigation_frontpage(navigation_node $frontpage) {
     $frontpage->add(
             get_string('pluginname', 'h5plib_course_builder'),
@@ -43,6 +50,12 @@ function h5plib_course_builder_extend_navigation_frontpage(navigation_node $fron
     );
 }
 
+/**
+ * Retrieve the courses in the database.
+ *
+ * @return array
+ * @throws dml_exception
+ */
 function h5p_course_builder_get_courses(): array {
     global $DB;
     $courses = [];
@@ -68,7 +81,7 @@ function h5p_course_builder_find_course(int $selectedcourseindex, array $courses
 /**
  * @return stdClass The course where templates can be added
  */
-function h5p_course_builder_get_template_course(): bool | stdClass {
+function h5p_course_builder_get_template_course(): bool|stdClass {
     global $DB;
     return $DB->get_record('course', ['shortname' => 'coursebuilder']);
 }
@@ -81,6 +94,14 @@ function h5p_course_builder_get_added_templates(): array {
     return $DB->get_records('h5plib_course_builder_template');
 }
 
+/**
+ * Retrieve the templates added by admins in the plugin
+ *
+ * @param array $addedTemplates
+ * @param int $templateCourseId
+ * @return array
+ * @throws dml_exception
+ */
 function h5p_course_builder_get_available_templates(array $addedTemplates, int $templateCourseId): array {
     global $DB;
     $availableTemplates = [];
@@ -107,6 +128,8 @@ function h5p_course_builder_get_available_templates(array $addedTemplates, int $
 }
 
 /**
+ * Get the templates modified recently
+ *
  * @return array The templates that have been updated in the course but not in the plugin
  */
 function h5p_course_builder_get_updatable_templates(): array {
@@ -114,6 +137,13 @@ function h5p_course_builder_get_updatable_templates(): array {
     return $DB->get_records_sql('SELECT * FROM mdl_hvp WHERE id IN (SELECT presentationid FROM mdl_h5plib_course_builder_template WHERE mdl_h5plib_course_builder_template.timemodified < mdl_hvp.timemodified)');
 }
 
+/**
+ * Find a template depending on its index in the templates list
+ *
+ * @param int $index
+ * @return stdClass
+ * @throws dml_exception
+ */
 function h5p_course_builder_find_template(int $index): stdClass {
     global $DB;
     $templateInfos = new stdClass();
@@ -139,12 +169,20 @@ function h5p_course_builder_find_template(int $index): stdClass {
     return $templateInfos;
 }
 
+/**
+ * Updates the templates in the database
+ *
+ * @param array $templates
+ * @return bool
+ * @throws dml_exception
+ */
 function h5p_course_builder_update_templates(array $templates): bool {
     global $DB;
     if (!empty($templates)) {
         foreach ($templates as $template) {
             $templateId =
-                    $DB->get_record_sql("SELECT id FROM mdl_h5plib_course_builder_template WHERE presentationid = " . $template->id);
+                    $DB->get_record_sql("SELECT id FROM mdl_h5plib_course_builder_template WHERE presentationid = " .
+                            $template->id);
             $dataToUpdate = new stdClass();
             $dataToUpdate->id = $templateId->id;
             $dataToUpdate->json_content = $template->json_content;
@@ -160,6 +198,13 @@ function h5p_course_builder_update_templates(array $templates): bool {
     return false;
 }
 
+/**
+ * Gives a list of the templates names
+ *
+ * @param array $templates
+ * @return array
+ * @throws dml_exception
+ */
 function h5p_course_builder_get_templates_names(array $templates): array {
     global $DB;
     $names = [];
@@ -212,7 +257,6 @@ function h5plib_course_builder_display_all_presentations(array $presentations, s
     }
     echo $OUTPUT->box_end();
 }
-
 
 /**
  * Used to display some presentations in a carousel
@@ -320,6 +364,8 @@ function h5plib_course_builder_generate_presentation_content(stdClass $presentat
 }
 
 /**
+ * Displays a card on the screen with some information about a presentation
+ *
  * @param mixed $presentation
  * @param stdClass $user
  * @return void
@@ -347,6 +393,13 @@ function h5plib_course_builder_display_card_from_presentation(mixed $presentatio
     echo html_writer::end_tag('div');
 }
 
+/**
+ * @param $title
+ * @param $template
+ * @param $introduction
+ * @param $modulename
+ * @return stdClass
+ */
 function h5plib_course_builder_generate_module($title, $template, $introduction, $modulename) {
     global $DB;
     $retrievedModule = $DB->get_record('modules', ['name' => $modulename]);
@@ -418,6 +471,11 @@ function h5plib_course_builder_redirect_success(string $message): void {
             \core\output\notification::NOTIFY_SUCCESS);
 }
 
+/**
+ * Check if a user is enrolled to any course
+ *
+ * @return bool
+ */
 function h5plib_course_builder_is_enrolled_to_any_course($user): bool {
     $courses = h5p_course_builder_get_courses();
     $isEnrolled = false;
@@ -477,14 +535,19 @@ function h5plib_course_builder_delete_user_enrolments(stdClass $user): void {
 
 }
 
-function h5plib_course_builder_display_logo() {
+/**
+ * Displays the plugin's logo on the page
+ *
+ * @return void
+ */
+function h5plib_course_builder_display_logo(): void {
     echo html_writer::tag('br', '');
     echo html_writer::tag('br', '');
     echo html_writer::start_tag('center');
     echo html_writer::empty_tag('img', [
-      'src' => 'medias/img/course_builder_logo.png',
-      'width' => '200px',
-      'alt' => 'logo',
+            'src' => 'medias/img/course_builder_logo.png',
+            'width' => '200px',
+            'alt' => 'logo',
     ]);
     echo html_writer::end_tag('center');
-  }
+}

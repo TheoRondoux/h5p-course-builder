@@ -27,16 +27,16 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Course Builder';
 $string['test'] = 'test';
-$string['creationtitle'] = 'Create a new presentation';
-$string['presentationtitle'] = 'Presentation title';
+$string['creationtitle'] = 'Create a new content';
+$string['presentationtitle'] = 'Content title';
 $string['coursechoice'] = 'Link to course';
 $string['selectcoursetext'] = 'Select a course...';
-$string['requieredpresentationtitle'] = 'Please enter a title for your presentation';
-$string['requieredcoursechoice'] = 'Please chose a course to link you presentation with.';
-$string['createpresentation'] = "Create presentation";
+$string['requieredpresentationtitle'] = 'Please enter a title for your content';
+$string['requieredcoursechoice'] = 'Please chose a course to link you content with.';
+$string['createpresentation'] = "Create content";
 $string['configtitle'] = "Course Builder Settings";
 $string['selecttemplate'] = 'Choose a template';
-$string['requiredtemplatechoice'] = 'Please choose a template to use for your presentation.';
+$string['requiredtemplatechoice'] = 'Please choose a template to use for your content.';
 $string['settings'] = 'Settings';
 $string['back'] = 'Back';
 
@@ -45,36 +45,37 @@ $string['addtemplate'] = "Add a template";
 $string['nonewtemplates'] = 'No new templates to add. Everything\'s clear!';
 $string['addselectedtemplate'] = 'Add Selected Template';
 $string['availabletemplates'] = 'Available templates';
-$string['updatetemplatestitle'] = 'Update Templates';
+$string['updatetemplatestitle'] = 'Update templates';
 $string['updatabletemplatelisttitle'] = 'The following templates can be updated';
 $string['updatenow'] = 'Update now';
 $string['nothingtoupdate'] = 'Nothing to update for the moment';
-$string['deletetemplatetitle'] = 'Delete a template';
-$string['notemplatetodelete'] = 'No templates  to delete.';
-$string['deletetemplate'] = 'Delete Template';
+$string['deletetemplatetitle'] = 'Remove a template';
+$string['notemplatetodelete'] = 'No templates  to remove.';
+$string['deletetemplate'] = 'Remove template';
 $string['presentationintro'] = 'Introduction';
-$string['sharepresentation'] = 'Share your presentation';
+$string['sharepresentation'] = 'Share your content';
 
-$string['mypresentationstitle'] = "My Presentations";
-$string['createnewpresentation'] = "Create new presentation";
-$string['nopresentation'] = "No presentations created yet";
-$string['showpresentations'] = "Show all my presentations";
-$string['showsharedpresentations'] = "Show shared presentations";
+$string['mypresentationstitle'] = "My creations";
+$string['createnewpresentation'] = "Create new content";
+$string['nopresentation'] = "No content created yet";
+$string['showpresentations'] = "Show all my creations";
+$string['showsharedpresentations'] = "Show shared contents";
 
-$string['sharedpresentationstitle'] = "Shared presentations";
-$string['nosharedpresentations'] = "No shared presentations created yet";
+$string['sharedpresentationstitle'] = "Shared contents";
+$string['nosharedpresentations'] = "No shared content created yet";
 
 $string['notemplateerror'] = 'No templates available for the moment, please contact an administrator.';
-$string['presentationcreated'] = 'Presentation created successfully';
-$string['nocoursesenrolledin'] = 'Unable to create a presentation, you are not enrolled in any courses.';
+$string['presentationcreated'] = 'Content created successfully';
+$string['nocoursesenrolledin'] = 'Unable to access the plugin, you are not enrolled in any courses.';
 $string['noteditingteacherinanycourse'] = 'Unable to access the page, you are not an editing teacher in any courses.';
 
 $string['noaccesstosettings'] = 'Unable to access to the plugin\'s settings page. You need to be a site administrator.';
-$string['categorydescription'] = "A category to reference all the courses needed for the presentation editor";
+$string['categorydescription'] = "A category to reference all the courses needed for the content editor";
 $string['courseadded'] = "Course added successfully";
 $string['templateadded'] = "Template added successfully";
 $string['templatesupdated'] = "Templates updated successfully";
-$string['templatedeleted'] = "Template deleted successfully";
+$string['templatedeleted'] = "Template removed successfully";
+$string['gototemplatesrepo'] = "Go to templates repository";
 
 $string['generalconfiguration'] = "General Configuration";
 $string['notemplatecreated'] = "No template course found, do you want to create one?";

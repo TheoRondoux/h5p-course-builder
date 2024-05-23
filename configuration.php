@@ -33,8 +33,8 @@ use core_analytics\site;
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot . '/course/lib.php');
-require_once('./libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once('./lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 
 require_login();
 if (!is_siteadmin()) {
@@ -79,7 +79,8 @@ if ($data = $configForm->get_data()) {
     $newCourse->visible = 0;
 
     $createdCourse = create_course($newCourse);
-    redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'), get_string('courseadded', 'h5plib_course_builder'), null,
+    redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'), get_string('courseadded', 'h5plib_course_builder'),
+            null,
             \core\output\notification::NOTIFY_SUCCESS);
 }
 
@@ -100,7 +101,8 @@ if ($data = $addTemplateForm->get_data()) {
         $newTemplate->timemodified = time();
 
         $DB->insert_record('h5plib_course_builder_template', $newTemplate);
-        redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'), get_string('templateadded', 'h5plib_course_builder'), null,
+        redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'),
+                get_string('templateadded', 'h5plib_course_builder'), null,
                 \core\output\notification::NOTIFY_SUCCESS);
     }
 }
@@ -109,7 +111,8 @@ if ($data = $updateTemplateForm->get_data()) {
     $templates = h5p_course_builder_get_updatable_templates();
     $isSuccess = h5p_course_builder_update_templates($templates);
     if ($isSuccess) {
-        redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'), get_string('templatesupdated', 'h5plib_course_builder'),
+        redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'),
+                get_string('templatesupdated', 'h5plib_course_builder'),
                 null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
@@ -119,7 +122,8 @@ if ($data = $deleteTemplateForm->get_data()) {
         $selectedTemplateIndex = $data->select_delete_template;
         $selectedTemplate = h5p_course_builder_find_template($selectedTemplateIndex);
         $DB->delete_records('h5plib_course_builder_template', ['id' => $selectedTemplate->id]);
-        redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'), get_string('templatedeleted', 'h5plib_course_builder'),
+        redirect(new moodle_url('/h5p/h5plib/course_builder/configuration.php'),
+                get_string('templatedeleted', 'h5plib_course_builder'),
                 null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }

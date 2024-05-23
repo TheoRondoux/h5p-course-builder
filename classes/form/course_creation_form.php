@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 
 class course_creation_form extends \moodleform {
     public function definition() {
@@ -56,7 +56,8 @@ class course_creation_form extends \moodleform {
             $coursesNames[] = $course->fullname;
         }
 
-        $courseCreationForm->addElement('select', 'course_select', get_string('coursechoice', 'h5plib_course_builder'), $coursesNames);
+        $courseCreationForm->addElement('select', 'course_select', get_string('coursechoice', 'h5plib_course_builder'),
+                $coursesNames);
         $courseCreationForm->addRule(
                 'course_select',
                 get_string('requieredcoursechoice', 'h5plib_course_builder'),
@@ -80,7 +81,8 @@ class course_creation_form extends \moodleform {
 
         $courseCreationForm->addElement('textarea', 'presentation_intro', get_string('presentationintro', 'h5plib_course_builder'),
                 'wrap="virtual" rows="7" cols="20"');
-        $courseCreationForm->addElement('advcheckbox', 'share_presentation', get_string('sharepresentation', 'h5plib_course_builder'),
+        $courseCreationForm->addElement('advcheckbox', 'share_presentation',
+                get_string('sharepresentation', 'h5plib_course_builder'),
                 ' ', ['shared' => 1], [0, 1]);
         $courseCreationForm->addElement('submit', 'createpresentationsubmitbutton',
                 get_string('createpresentation', 'h5plib_course_builder'), h5plib_course_builder_get_custom_btn_attributes());

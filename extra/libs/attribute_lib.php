@@ -19,10 +19,9 @@
  * @package     h5plib_course_builder
  * @copyright   2024 - Godfred Boaheng
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * 
- * 
+ *
+ *
  */
-
 
 /**
  * Used to get the attributes for the back button
@@ -33,12 +32,12 @@
 
 function h5plib_course_builder_get_back_btn_attributes() {
     $back_url = new moodle_url('/h5p/h5plib/course_builder/');
-    $attributes = array(
-        'href' => $back_url,
-        'role' => 'button',
-        'class' => 'btn',
-        'style' => 
-            '
+    $attributes = [
+            'href' => $back_url,
+            'role' => 'button',
+            'class' => 'btn',
+            'style' =>
+                    '
             display: inline-block;
             text-align: center;
             vertical-align: middle;
@@ -47,8 +46,8 @@ function h5plib_course_builder_get_back_btn_attributes() {
             border-radius: 5px; 
             padding: 10px; 
             border-color: #3F2A56;
-            color: white;'
-        );
+            color: white;',
+    ];
     return $attributes;
 }
 
@@ -59,18 +58,18 @@ function h5plib_course_builder_get_back_btn_attributes() {
  */
 
 function h5plib_course_builder_get_create_btn_attributes() {
-    $attributes = array(
-        'href' => 'creation_form.php',
-        'role' => 'button',
-        'class' => 'btn',
-        'style' => 
-            '
+    $attributes = [
+            'href' => 'creation_form.php',
+            'role' => 'button',
+            'class' => 'btn',
+            'style' =>
+                    '
             background-color: #3F2A56;
             border-radius: 5px; 
             border-color: #3F2A56;
             padding:20px;
-            color : #fff;'
-        );
+            color : #fff;',
+    ];
     return $attributes;
 }
 
@@ -81,16 +80,16 @@ function h5plib_course_builder_get_create_btn_attributes() {
  */
 
 function h5plib_course_builder_get_custom_btn_attributes() {
-    $attributes = array(
-        'role' => 'button',
-        'style' => 
-            '
+    $attributes = [
+            'role' => 'button',
+            'style' =>
+                    '
             background-color: #3F2A56;
             border-radius: 4px; 
             border-color: #3F2A56;
             padding: 10px;
-            color : #fff;'
-        );
+            color : #fff;',
+    ];
     return $attributes;
 }
 
@@ -101,41 +100,41 @@ function h5plib_course_builder_get_custom_btn_attributes() {
  */
 
 function h5plib_course_builder_get_presentation_btn_attributes() {
-    $attributes = array(
-        'href' => 'presentations.php',
-        'role' => 'button',
-        'class' => 'btn',
-        'style' => 
-            '
+    $attributes = [
+            'href' => 'content.php',
+            'role' => 'button',
+            'class' => 'btn',
+            'style' =>
+                    '
             background-color: #3F2A56;
             border-radius: 5px; 
             border-color: #3F2A56;
             padding:20px;
-            color : #fff;'
-        );
+            color : #fff;',
+    ];
     return $attributes;
 }
 
 /**
  * Used to get the attributes for the edit button
  *
- * @return array $attributes
  * @param moodle_url $edit_url
+ * @return array $attributes
  */
 
 function h5plib_course_builder_get_edit_btn_attributes($edit_url) {
-    $attributes = array(
-        'href' => $edit_url,
-        'role' => 'button',
-        'class' => 'btn',
-        'style' => 
-            '
+    $attributes = [
+            'href' => $edit_url,
+            'role' => 'button',
+            'class' => 'btn',
+            'style' =>
+                    '
             background-color: #3F2A56;
             border-radius: 5px; 
             border-color: #3F2A56;
             padding:10px;
-            color : #fff;'
-        );
+            color : #fff;',
+    ];
     return $attributes;
 }
 
@@ -146,20 +145,20 @@ function h5plib_course_builder_get_edit_btn_attributes($edit_url) {
  *
  */
 function h5plib_course_builder_get_left_nav_btn_attributes() {
-   
-    $attributes = array(
-        'href' => '#carouselExampleIndicators',
-        'class' => 'btn mb-3 mr-1',
-        'data-slide' => 'prev',
-        'role' => 'button',
-        'style' => 
-            '
+
+    $attributes = [
+            'href' => '#carouselExampleIndicators',
+            'class' => 'btn mb-3 mr-1',
+            'data-slide' => 'prev',
+            'role' => 'button',
+            'style' =>
+                    '
             background-color: #3F2A56;
             border-radius: 4px; 
             border-color: #3F2A56;
             padding: 10px;
-            color : #fff;'
-        );
+            color : #fff;',
+    ];
     return $attributes;
 }
 
@@ -170,19 +169,19 @@ function h5plib_course_builder_get_left_nav_btn_attributes() {
  */
 
 function h5plib_course_builder_get_right_nav_btn_attributes() {
-    $attributes = array(
-        'href' => '#carouselExampleIndicators',
-        'class' => 'btn mb-3',
-        'data-slide' => 'next',
-        'role' => 'button',
-        'style' => 
-            '
+    $attributes = [
+            'href' => '#carouselExampleIndicators',
+            'class' => 'btn mb-3',
+            'data-slide' => 'next',
+            'role' => 'button',
+            'style' =>
+                    '
             background-color: #3F2A56;
             border-radius: 4px; 
             border-color: #3F2A56;
             padding: 10px;
-            color : #fff;'
-        );
+            color : #fff;',
+    ];
     return $attributes;
 }
 

@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 
 class config_form extends \moodleform {
     public function definition() {
@@ -38,10 +38,14 @@ class config_form extends \moodleform {
         $templateCourse = $DB->get_record('course', ['shortname' => 'coursebuilder']);
         if (!$templateCourse) {
             $form->addElement('html', '<center><p> ' . get_string('notemplatecreated', 'h5plib_course_builder') . ' </p></center>');
-            $form->addElement('submit', 'create_editor_template_course', get_string('createcourse', 'h5plib_course_builder'), h5plib_course_builder_get_custom_btn_attributes() );
+            $form->addElement('submit', 'create_editor_template_course', get_string('createcourse', 'h5plib_course_builder'),
+                    h5plib_course_builder_get_custom_btn_attributes());
         } else {
-            $form->addElement('html', '<center><p>Template course already created, you can click <a href="' .
-                    (new \moodle_url("/course/view.php?id=" . $templateCourse->id)) . '">here</a> to access it</p></center>');
+            $form->addElement('html',
+                    '<center><p>Template course already created, you can click on the button below to access it</p></center>');
+            $form->addElement('html', '<center><a href="' . new \moodle_url("/course/view.php?id=" . $templateCourse->id) .
+                    '">' . get_string('gototemplatesrepo', 'h5plib_course_builder') . '</a></center>',
+                    h5plib_course_builder_get_custom_btn_attributes());
         }
     }
 }

@@ -31,9 +31,9 @@
 use core_analytics\site;
 
 require_once('../../../config.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 require_login();
 h5plib_course_builder_no_access_redirect($USER);
 

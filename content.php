@@ -34,15 +34,15 @@
 use core_analytics\site;
 
 require_once('../../../config.php');
-require_once('./libs/lib.php');
-require_once($CFG->dirroot . '/h5p/h5plib/course_builder/libs/attribute_lib.php');
+require_once('./lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/course_builder/extra/libs/attribute_lib.php');
 
 require_login();
 h5plib_course_builder_no_access_redirect($USER);
 
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_url(new moodle_url('/h5p/h5plib/course_builder/presentations.php'));
+$PAGE->set_url(new moodle_url('/h5p/h5plib/course_builder/content.php'));
 $PAGE->set_pagelayout('standard');
 
 $type = optional_param('type', null, PARAM_TEXT);
@@ -54,7 +54,8 @@ if ($type == null) {
     $pageTitle = 'mypresentationstitle';
     $presentations =
             $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_course_builder_pres.userid, mdl_h5plib_course_builder_pres.shared FROM mdl_hvp,mdl_h5plib_course_builder_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_course_builder_pres WHERE userid = ' .
-                    $USER->id . ') AND mdl_hvp.id = mdl_h5plib_course_builder_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
+                    $USER->id .
+                    ') AND mdl_hvp.id = mdl_h5plib_course_builder_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
 } else if ($type == 'shared') {
     $pageTitle = 'sharedpresentationstitle';
     $presentations =
