@@ -1,4 +1,36 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
+/**
+ *
+ * @package     h5plib_poc_editor
+ * @copyright   2024 - Godfred Boaheng
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * 
+ * 
+ */
+
+
+/**
+ * Used to get the attributes for the back button
+ *
+ * @return array $attributes
+ * @var moodle_url $back_url
+ */
+
 function h5plib_poc_editor_get_back_btn_attributes() {
     $back_url = new moodle_url('/h5p/h5plib/poc_editor/');
     $attributes = array(
@@ -20,6 +52,12 @@ function h5plib_poc_editor_get_back_btn_attributes() {
     return $attributes;
 }
 
+/**
+ * Used to get the attributes for the create button
+ *
+ * @return array $attributes
+ */
+
 function h5plib_poc_editor_get_create_btn_attributes() {
     $attributes = array(
         'href' => 'creation_form.php',
@@ -36,6 +74,12 @@ function h5plib_poc_editor_get_create_btn_attributes() {
     return $attributes;
 }
 
+/**
+ * Used to get the attributes for the custom button
+ *
+ * @return array $attributes
+ */
+
 function h5plib_poc_editor_get_custom_btn_attributes() {
     $attributes = array(
         'role' => 'button',
@@ -49,6 +93,12 @@ function h5plib_poc_editor_get_custom_btn_attributes() {
         );
     return $attributes;
 }
+
+/**
+ * Used to get the attributes for the presentation button
+ *
+ * @return array $attributes
+ */
 
 function h5plib_poc_editor_get_presentation_btn_attributes() {
     $attributes = array(
@@ -66,6 +116,12 @@ function h5plib_poc_editor_get_presentation_btn_attributes() {
     return $attributes;
 }
 
+/**
+ * Used to get the attributes for the edit button
+ *
+ * @return array $attributes
+ * @param moodle_url $edit_url
+ */
 
 function h5plib_poc_editor_get_edit_btn_attributes($edit_url) {
     $attributes = array(
@@ -83,9 +139,14 @@ function h5plib_poc_editor_get_edit_btn_attributes($edit_url) {
     return $attributes;
 }
 
+/**
+ * Used to get the attributes for the left navigation button
+ *
+ * @return array $attributes
+ *
+ */
 function h5plib_poc_editor_get_left_nav_btn_attributes() {
-    $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
-    $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
+   
     $attributes = array(
         'href' => '#carouselExampleIndicators',
         'class' => 'btn mb-3 mr-1',
@@ -101,6 +162,12 @@ function h5plib_poc_editor_get_left_nav_btn_attributes() {
         );
     return $attributes;
 }
+
+/**
+ * Used to get the attributes for the right navigation button
+ *
+ * @return array $attributes
+ */
 
 function h5plib_poc_editor_get_right_nav_btn_attributes() {
     $attributes = array(
