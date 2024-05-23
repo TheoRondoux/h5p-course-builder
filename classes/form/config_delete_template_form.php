@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
 
 class config_delete_template_form extends \moodleform {
     public function definition() {
@@ -41,8 +42,7 @@ class config_delete_template_form extends \moodleform {
             $form->addElement('select', 'select_delete_template', get_string('selecttemplate', 'h5plib_poc_editor'),
                     $templatesNames);
 
-            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'),
-                    ['class' => 'custom-btn']);
+            $form->addElement('submit', 'delete_template', get_string('deletetemplate', 'h5plib_poc_editor'), get_custom_btn_attributes());
         }
 
     }

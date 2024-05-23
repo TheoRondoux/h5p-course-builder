@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/accesslib.php');
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
 
 class course_creation_form extends \moodleform {
     public function definition() {
@@ -82,6 +83,6 @@ class course_creation_form extends \moodleform {
         $courseCreationForm->addElement('advcheckbox', 'share_presentation', get_string('sharepresentation', 'h5plib_poc_editor'),
                 ' ', ['shared' => 1], [0, 1]);
         $courseCreationForm->addElement('submit', 'createpresentationsubmitbutton',
-                get_string('createpresentation', 'h5plib_poc_editor'), ['class' => 'custom-btn']);
+                get_string('createpresentation', 'h5plib_poc_editor'), get_custom_btn_attributes());
     }
 }

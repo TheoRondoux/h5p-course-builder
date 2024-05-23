@@ -32,6 +32,7 @@ use core_analytics\site;
 
 require_once('../../../config.php');
 require_once('./libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
 require_login();
 h5plib_poc_editor_no_access_redirect($USER);
 
@@ -40,7 +41,6 @@ $PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/h5p/h5plib/poc_editor/index.php'));
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
-$PAGE->set_heading(get_string('pluginname', 'h5plib_poc_editor'));
 
 $userPresentations =
         $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_poc_editor_pres WHERE userid = ' .
@@ -49,9 +49,17 @@ $sharedPresentations =
         $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.course, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_poc_editor_pres.userid, mdl_h5plib_poc_editor_pres.shared FROM mdl_hvp,mdl_h5plib_poc_editor_pres, mdl_user WHERE mdl_h5plib_poc_editor_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_poc_editor_pres.presentationid AND mdl_h5plib_poc_editor_pres.userid != ' .
                 $USER->id . ' AND mdl_h5plib_poc_editor_pres.userid = mdl_user.id ');
 
+$carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
+$carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
 echo $OUTPUT->header();
+echo html_writer::start_tag('center');
+echo html_writer::empty_tag('img',['src' => 'medias/img/course_builder_logo.png', 'width' => '350px','alt' => 'logo']);
+echo html_writer::end_tag('center');
+echo html_writer::tag('br', '');
+
 if (is_siteadmin()) {
     $settings_url = new moodle_url('/h5p/h5plib/poc_editor/configuration.php');
+
     echo html_writer::tag('a', get_string('settings', 'h5plib_poc_editor'), ['href' => $settings_url]);
 
 }
@@ -59,18 +67,22 @@ if (is_siteadmin()) {
 h5plib_poc_editor_delete_user_enrolments($USER);
 echo html_writer::tag('br', '');
 
-echo html_writer::start_tag('div', ['class' => 'd-grid gap-2 col-6 mx-auto']);
-echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'),
-        ['href' => 'creation_form.php', 'role' => 'button', 'class' => 'btn btn-block create-btn']);
-echo html_writer::end_tag('div');
+echo html_writer::start_tag('center');
+echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_poc_editor'), get_create_btn_attributes());
+echo html_writer::end_tag('center');
 echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_poc_editor'));
 if ($userPresentations && count($userPresentations) < 7) {
     h5plib_poc_editor_display_all_presentations($userPresentations, $USER);
 } else if ($userPresentations && count($userPresentations) > 6) {
+    echo html_writer::start_tag('div', ['class' => 'col-12 text-right']);
+    echo html_writer::tag('a', $carousel_nav_icon_left, get_left_nav_btn_attributes());
+    echo html_writer::tag('a', $carousel_nav_icon_right, get_right_nav_btn_attributes());
+
+    echo html_writer::end_tag('div');
     h5plib_poc_editor_display_some_presentations($userPresentations, $USER, 6);
     echo html_writer::start_tag('center');
-    echo html_writer::tag('a', get_string('showpresentations', 'h5plib_poc_editor'),['href' => 'presentations.php', 'role' => 'button', 'class' => 'btn custom-btn']);
+    echo html_writer::tag('a', get_string('showpresentations', 'h5plib_poc_editor'), get_presentation_btn_attributes());
     echo html_writer::end_tag('center');
     
 } else {

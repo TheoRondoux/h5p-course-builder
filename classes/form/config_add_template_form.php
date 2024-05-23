@@ -27,11 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/config.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
 
 class config_add_template_form extends \moodleform {
     public function definition() {
         $form = $this->_form;
-        $attributes = ['style' => 'background-color: #3F2A56; border-radius: 5px; padding: 10px; border-color: #3F2A56;'];
 
         $form->addElement('html', '<h4>' . get_string('addtemplate', 'h5plib_poc_editor') . '</h4>');
 
@@ -47,8 +47,7 @@ class config_add_template_form extends \moodleform {
                 }
                 $form->addElement('select', 'available_templates', get_string('availabletemplates', 'h5plib_poc_editor'),
                         $availableTemplatesNames);
-                $form->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'),
-                        $attributes);
+                $form->addElement('submit', 'submit_add_template', get_string('addselectedtemplate', 'h5plib_poc_editor'), get_custom_btn_attributes());
             } else {
                 $form->addElement('html', '<center><p>' . get_string('nonewtemplates', 'h5plib_poc_editor') . '</p></center>');
             }

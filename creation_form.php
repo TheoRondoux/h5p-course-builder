@@ -33,6 +33,7 @@ use core_analytics\site;
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/lib.php');
 require_once($CFG->dirroot . '/course/modlib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
 require_login();
 h5plib_poc_editor_no_access_redirect($USER);
 
@@ -41,6 +42,7 @@ $PAGE->set_context($context);
 $PAGE->set_url(new moodle_url('/h5p/h5plib/poc_editor/creation_form.php'));
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
+display_course_builder_logo();
 $PAGE->set_heading(get_string('creationtitle', 'h5plib_poc_editor'));
 
 $createCourseForm = new \h5plib_poc_editor\form\course_creation_form();
@@ -80,8 +82,7 @@ if ($data = $createCourseForm->get_data()) {
 }
 
 echo $OUTPUT->header();
-$back_url = new moodle_url('/h5p/h5plib/poc_editor/');
-echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $back_url, 'role' => 'button', 'class' => 'btn back-btn btn-primary btn-sm']);
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), get_back_btn_attributes());
 
 $createCourseForm->display();
 echo $OUTPUT->footer();

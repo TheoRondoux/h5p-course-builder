@@ -34,6 +34,8 @@ require_once('../../../config.php');
 require_once($CFG->dirroot . '/course/classes/category.php');
 require_once($CFG->dirroot . '/course/lib.php');
 require_once('./libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
+
 require_login();
 if (!is_siteadmin()) {
     h5plib_poc_editor_redirect_error(get_string('noaccesstosettings', 'h5plib_poc_editor'));
@@ -46,6 +48,7 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_poc_editor') . " " . $SITE->fullname);
 $PAGE->set_heading(get_string('configtitle', 'h5plib_poc_editor'));
 
+display_course_builder_logo();
 $configForm = new \h5plib_poc_editor\form\config_form();
 $addTemplateForm = new \h5plib_poc_editor\form\config_add_template_form();
 $updateTemplateForm = new \h5plib_poc_editor\form\config_update_template_form();
@@ -122,11 +125,14 @@ if ($data = $deleteTemplateForm->get_data()) {
 }
 
 echo $OUTPUT->header();
-$settings_url = new moodle_url('/h5p/h5plib/poc_editor/');
-echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $settings_url, 'role' => 'button', 'class' => 'btn custom-btn btn-sm']);
+echo html_writer::tag('br', '');
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), get_back_btn_attributes());
 $configForm->display();
+echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('templatemanagementtitle', 'h5plib_poc_editor'));
 $addTemplateForm->display();
+echo html_writer::tag('br', '');
 $updateTemplateForm->display();
+echo html_writer::tag('br', '');
 $deleteTemplateForm->display();
 echo $OUTPUT->footer();

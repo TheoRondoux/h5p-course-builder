@@ -30,6 +30,7 @@
 
 require_once('../../../config.php');
 require_once('./libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
 
 require_login();
 h5plib_poc_editor_no_access_redirect($USER);
@@ -59,11 +60,10 @@ if (!$presentationEditorInfo->shared && $USER->id != $presentationEditorInfo->us
 }
 
 $author = $DB->get_record('user', ['id' => $presentationEditorInfo->userid], 'firstname, lastname');
-
-    $PAGE->set_heading($relatedCourse->fullname);
+display_course_builder_logo();
+$PAGE->set_heading($relatedCourse->fullname);
 
 $editUrl = new moodle_url("/course/modedit.php", ['update' => $moduleId, 'return' => 1]) . "#fgroup_id_h5peditor";
-$back_url = new moodle_url('/h5p/h5plib/poc_editor/');
 
 echo $OUTPUT->header();
 
@@ -73,7 +73,7 @@ echo html_writer::end_tag('center');
 if ($presentationEditorInfo->userid != $USER->id) {
     echo html_writer::tag('p', get_string('by', 'h5plib_poc_editor') . " " . $author->firstname . " " . $author->lastname);
 }
-echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $back_url, 'role' => 'button', 'class' => 'btn back-btn']);
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),get_back_btn_attributes());
 echo html_writer::tag('br', '');
 if ($presentationEditorInfo->userid == $USER->id) {
     echo html_writer::start_tag('div', ['class' => 'details']);
@@ -88,7 +88,7 @@ echo html_writer::start_tag('div', ['class' => 'preview']);
 echo html_writer::tag('h5', get_string('preview', 'h5plib_poc_editor'));
 
 if ($presentationEditorInfo->userid == $USER->id) {
-echo html_writer::tag('a', get_string('edit', 'h5plib_poc_editor'), ['href' => $editUrl, 'role' => 'button', 'class' => 'btn back-btn']);
+echo html_writer::tag('a', get_string('edit', 'h5plib_poc_editor'), get_edit_btn_attributes($editUrl));
 }
 
 echo '<iframe src="' . new moodle_url("/mod/hvp/embed.php?id=" . $moduleId) .

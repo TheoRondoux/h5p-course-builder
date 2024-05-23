@@ -207,18 +207,10 @@ function h5plib_poc_editor_display_all_presentations(array $presentations, stdCl
 }
 
 function h5plib_poc_editor_display_some_presentations(array $presentations, stdClass $user, int $number = 6): void {
-    $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
-    $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
 
     echo html_writer::start_tag('section', ['class' => 'pt-5 pb-5']);
     echo html_writer::start_tag('div', ['class' => 'container']);
     echo html_writer::start_tag('div', ['class' => 'row']);
-    echo html_writer::start_tag('div', ['class' => 'col-12 text-right']);
-    echo html_writer::tag('a', $carousel_nav_icon_left,
-            ['href' => '#carouselExampleIndicators', 'class' => 'btn mb-3 mr-1 custom-btn', 'data-slide' => 'prev']);
-    echo html_writer::tag('a', $carousel_nav_icon_right,
-            ['href' => '#carouselExampleIndicators', 'class' => 'btn  mb-3 custom-btn', 'data-slide' => 'next']);
-    echo html_writer::end_tag('div');
     echo h5plib_poc_editor_generate_carousel($presentations, $number, $user);
     echo html_writer::end_tag('div'); // row
     echo html_writer::end_tag('div'); // container
@@ -463,3 +455,15 @@ function h5plib_poc_editor_delete_user_enrolments(stdClass $user): void {
     }
 
 }
+
+function display_course_builder_logo() {
+    echo html_writer::tag('br', '');
+    echo html_writer::tag('br', '');
+    echo html_writer::start_tag('center');
+    echo html_writer::empty_tag('img', [
+      'src' => 'medias/img/course_builder_logo.png',
+      'width' => '200px',
+      'alt' => 'logo',
+    ]);
+    echo html_writer::end_tag('center');
+  }

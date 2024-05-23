@@ -35,6 +35,8 @@ use core_analytics\site;
 
 require_once('../../../config.php');
 require_once('./libs/lib.php');
+require_once($CFG->dirroot . '/h5p/h5plib/poc_editor/libs/attribute_functions.php');
+
 require_login();
 h5plib_poc_editor_no_access_redirect($USER);
 
@@ -65,10 +67,10 @@ if ($type == null) {
 $PAGE->set_heading(get_string($pageTitle, 'h5plib_poc_editor'));
 $PAGE->set_title(get_string($pageTitle, 'h5plib_poc_editor') . " " . $SITE->fullname);
 
+display_course_builder_logo();
 echo $OUTPUT->header();
 
-echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'),['href' => $back_url, 'role' => 'button', 'class' => 'btn custom-btn']);
-
+echo html_writer::tag('a', get_string('back', 'h5plib_poc_editor'), get_back_btn_attributes());
 
 h5plib_poc_editor_display_all_presentations($presentations, $USER);
 echo $OUTPUT->footer();
