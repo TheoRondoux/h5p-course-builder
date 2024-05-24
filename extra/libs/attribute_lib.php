@@ -79,7 +79,7 @@ function h5plib_course_builder_get_create_btn_attributes() {
  * @return array $attributes
  */
 
-function h5plib_course_builder_get_custom_btn_attributes() {
+function h5plib_course_builder_get_custom_btn_attributes(): array {
     $attributes = [
             'role' => 'button',
             'style' =>
@@ -99,7 +99,7 @@ function h5plib_course_builder_get_custom_btn_attributes() {
  * @return array $attributes
  */
 
-function h5plib_course_builder_get_presentation_btn_attributes() {
+function h5plib_course_builder_get_presentation_btn_attributes(): array {
     $attributes = [
             'href' => 'content.php',
             'role' => 'button',
@@ -122,7 +122,7 @@ function h5plib_course_builder_get_presentation_btn_attributes() {
  * @return array $attributes
  */
 
-function h5plib_course_builder_get_edit_btn_attributes($edit_url) {
+function h5plib_course_builder_get_edit_btn_attributes($edit_url): array {
     $attributes = [
             'href' => $edit_url,
             'role' => 'button',
@@ -144,7 +144,7 @@ function h5plib_course_builder_get_edit_btn_attributes($edit_url) {
  * @return array $attributes
  *
  */
-function h5plib_course_builder_get_left_nav_btn_attributes() {
+function h5plib_course_builder_get_left_nav_btn_attributes(): array {
 
     $attributes = [
             'href' => '#carouselExampleIndicators',
@@ -168,7 +168,7 @@ function h5plib_course_builder_get_left_nav_btn_attributes() {
  * @return array $attributes
  */
 
-function h5plib_course_builder_get_right_nav_btn_attributes() {
+function h5plib_course_builder_get_right_nav_btn_attributes(): array {
     $attributes = [
             'href' => '#carouselExampleIndicators',
             'class' => 'btn mb-3',

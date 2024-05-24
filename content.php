@@ -53,7 +53,7 @@ $presentations = [];
 if ($type == null) {
     $pageTitle = 'mypresentationstitle';
     $presentations =
-            $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_h5plib_course_builder_pres.userid, mdl_h5plib_course_builder_pres.shared FROM mdl_hvp,mdl_h5plib_course_builder_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_course_builder_pres WHERE userid = ' .
+            $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.course, mdl_hvp.timemodified, mdl_h5plib_course_builder_pres.userid, mdl_h5plib_course_builder_pres.shared FROM mdl_hvp,mdl_h5plib_course_builder_pres WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_course_builder_pres WHERE userid = ' .
                     $USER->id .
                     ') AND mdl_hvp.id = mdl_h5plib_course_builder_pres.presentationid ORDER BY mdl_hvp.timemodified DESC');
 } else if ($type == 'shared') {

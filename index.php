@@ -43,12 +43,13 @@ $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('pluginname', 'h5plib_course_builder') . " " . $SITE->fullname);
 
 $userPresentations =
-        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_course_builder_pres.userid, mdl_h5plib_course_builder_pres.shared FROM mdl_hvp,mdl_h5plib_course_builder_pres, mdl_user WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_course_builder_pres WHERE userid = ' .
+        $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_hvp.course, mdl_user.lastname, mdl_h5plib_course_builder_pres.userid, mdl_h5plib_course_builder_pres.shared FROM mdl_hvp,mdl_h5plib_course_builder_pres, mdl_user WHERE mdl_hvp.id IN (SELECT presentationid FROM mdl_h5plib_course_builder_pres WHERE userid = ' .
                 $USER->id .
                 ') AND mdl_hvp.id = mdl_h5plib_course_builder_pres.presentationid AND mdl_h5plib_course_builder_pres.userid = mdl_user.id ORDER BY mdl_hvp.timemodified DESC');
 $sharedPresentations =
         $DB->get_records_sql('SELECT mdl_hvp.id, mdl_hvp.name, mdl_hvp.course, mdl_hvp.timecreated, mdl_hvp.timemodified, mdl_user.firstname, mdl_user.lastname, mdl_h5plib_course_builder_pres.userid, mdl_h5plib_course_builder_pres.shared FROM mdl_hvp,mdl_h5plib_course_builder_pres, mdl_user WHERE mdl_h5plib_course_builder_pres.shared = 1 AND mdl_hvp.id = mdl_h5plib_course_builder_pres.presentationid AND mdl_h5plib_course_builder_pres.userid != ' .
                 $USER->id . ' AND mdl_h5plib_course_builder_pres.userid = mdl_user.id ');
+
 
 $carousel_nav_icon_left = '<i class="fa fa-arrow-left"></i>';
 $carousel_nav_icon_right = '<i class="fa fa-arrow-right"></i>';
@@ -60,8 +61,9 @@ echo html_writer::tag('br', '');
 
 if (is_siteadmin()) {
     $settings_url = new moodle_url('/h5p/h5plib/course_builder/configuration.php');
-
-    echo html_writer::tag('a', get_string('settings', 'h5plib_course_builder'), ['href' => $settings_url]);
+    $settings_attributes = h5plib_course_builder_get_custom_btn_attributes();
+    $settings_attributes['href'] = $settings_url;
+    echo html_writer::tag('a', get_string('settings', 'h5plib_course_builder'), $settings_attributes);
 
 }
 

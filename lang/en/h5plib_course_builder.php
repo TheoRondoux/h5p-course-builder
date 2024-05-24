@@ -54,6 +54,7 @@ $string['notemplatetodelete'] = 'No templates  to remove.';
 $string['deletetemplate'] = 'Remove template';
 $string['presentationintro'] = 'Introduction';
 $string['sharepresentation'] = 'Share your content';
+$string['partofcourse'] = 'This content is part of the course';
 
 $string['mypresentationstitle'] = "My creations";
 $string['createnewpresentation'] = "Create new content";

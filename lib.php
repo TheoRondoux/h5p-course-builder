@@ -226,11 +226,12 @@ function h5p_course_builder_get_templates_names(array $templates): array {
  * @return void
  */
 function h5plib_course_builder_display_all_presentations(array $presentations, stdClass $user): void {
-
     global $OUTPUT;
+    global $DB;
 
     echo $OUTPUT->box_start('card-columns');
     foreach ($presentations as $presentation) {
+        $relatedCourse = $DB->get_record('course', ['id' => $presentation->course]);
         $detailsUrl =
                 '<a href="' . new moodle_url("/h5p/h5plib/course_builder/details.php", ['id' => $presentation->id]) . '">' .
                 $presentation->name .
@@ -241,7 +242,7 @@ function h5plib_course_builder_display_all_presentations(array $presentations, s
                         'class' => 'card-img-top', 'alt' => 'Card image']);
         echo html_writer::start_tag('div', ['class' => 'card-body']);
         echo html_writer::tag('h5', $detailsUrl, ['class' => 'card-title']);
-        echo html_writer::tag('p', 'This presentation is part of the ' . $detailsUrl . ' course', ['class' => 'card-text']);
+        echo html_writer::tag('p', get_string('partofcourse', 'h5plib_course_builder') . ' ' . $relatedCourse->fullname , ['class' => 'card-text']);
         if ($presentation->shared == 1 && $user->id == $presentation->userid) {
             echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
         } else if ($presentation->shared == 1) {
@@ -342,13 +343,16 @@ function h5plib_course_builder_generate_presentation_card(array $presentations, 
  * @return void
  */
 function h5plib_course_builder_generate_presentation_content(stdClass $presentation, string $courseviewurl, stdClass $user): void {
+    global $DB;
+    $relatedCourse = $DB->get_record('course', ['id' => $presentation->course]);
+
     echo html_writer::start_tag('div', ['class' => 'card']);
     echo html_writer::empty_tag('img',
             ['src' => 'https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjMyMDc0fQ&s=42b2d9ae6feb9c4ff98b9133addfb698',
                     'class' => 'card-img-top', 'alt' => 'Card image']);
     echo html_writer::start_tag('div', ['class' => 'card-body']);
     echo html_writer::tag('h5', $courseviewurl, ['class' => 'card-title']);
-    echo html_writer::tag('p', 'This presentation is part of the ' . $courseviewurl . ' course', ['class' => 'card-text']);
+    echo html_writer::tag('p', get_string('partofcourse', 'h5plib_course_builder') . ' ' . $relatedCourse->fullname, ['class' => 'card-text']);
     if ($presentation->shared == 1 && $user->id == $presentation->userid) {
         echo html_writer::start_tag('center');
         echo html_writer::tag('small', 'Shared', ['class' => 'text-muted']);
