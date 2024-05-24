@@ -252,7 +252,7 @@ function h5plib_course_builder_display_all_presentations(array $presentations, s
         echo html_writer::end_tag('div');
 
         echo html_writer::start_tag('div', ['class' => 'card-footer']);
-        echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
+        echo html_writer::tag('small', date('l d M, Y', $presentation->timemodified), ['class' => 'text-muted']);
         echo html_writer::end_tag('div');
         echo html_writer::end_tag('div'); // card
     }
@@ -362,7 +362,7 @@ function h5plib_course_builder_generate_presentation_content(stdClass $presentat
     }
     echo html_writer::end_tag('div'); // card-body
     echo html_writer::start_tag('div', ['class' => 'card-footer']);
-    echo html_writer::tag('small', date('l d M, Y', $presentation->timecreated), ['class' => 'text-muted']);
+    echo html_writer::tag('small', date('l d M, Y', $presentation->timemodified), ['class' => 'text-muted']);
     echo html_writer::end_tag('div'); // card-footer
     echo html_writer::end_tag('div'); // card
 }
@@ -391,7 +391,7 @@ function h5plib_course_builder_display_card_from_presentation(mixed $presentatio
         echo html_writer::tag('small', 'By ' . $presentation->firstname . ' ' . $presentation->lastname, ['class' => 'text-muted']);
     }
     echo html_writer::start_tag('p', ['class' => 'card-text']);
-    echo html_writer::tag('small', userdate($presentation->timecreated), ['class' => 'text-muted']);
+    echo html_writer::tag('small', userdate($presentation->timemodified), ['class' => 'text-muted']);
     echo html_writer::end_tag('p');
     echo html_writer::end_tag('div');
     echo html_writer::end_tag('div');
