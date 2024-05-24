@@ -532,7 +532,6 @@ function h5plib_course_builder_delete_user_enrolments(stdClass $user): void {
         $enrolplugin = enrol_get_plugin($enrolInstance->enrol);
         $enrolplugin->unenrol_user($enrolInstance, $userId);
     }
-
 }
 
 /**

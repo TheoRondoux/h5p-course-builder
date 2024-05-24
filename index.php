@@ -74,9 +74,9 @@ echo html_writer::tag('a', get_string('createnewpresentation', 'h5plib_course_bu
 echo html_writer::end_tag('center');
 echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('mypresentationstitle', 'h5plib_course_builder'));
-if ($userPresentations && count($userPresentations) < 7) {
+if ($userPresentations && count($userPresentations) < 4) {
     h5plib_course_builder_display_all_presentations($userPresentations, $USER);
-} else if ($userPresentations && count($userPresentations) > 6) {
+} else if ($userPresentations && count($userPresentations) > 3) {
     echo html_writer::start_tag('div', ['class' => 'col-12 text-right']);
     echo html_writer::tag('a', $carousel_nav_icon_left, h5plib_course_builder_get_left_nav_btn_attributes());
     echo html_writer::tag('a', $carousel_nav_icon_right, h5plib_course_builder_get_right_nav_btn_attributes());
@@ -97,9 +97,9 @@ if ($userPresentations && count($userPresentations) < 7) {
 echo html_writer::tag('br', '');
 echo html_writer::tag('h3', get_string('sharedpresentationstitle', 'h5plib_course_builder'));
 
-if ($sharedPresentations && count($sharedPresentations) < 7) {
+if ($sharedPresentations && count($sharedPresentations) < 4) {
     h5plib_course_builder_display_all_presentations($sharedPresentations, $USER);
-} else if ($sharedPresentations && count($sharedPresentations) > 6) {
+} else if ($sharedPresentations && count($sharedPresentations) > 3) {
     h5plib_course_builder_display_some_presentations($sharedPresentations, $USER, 6);
     echo '<center><a href="' . new moodle_url('content.php', ['type' => 'shared']) . '">' .
             get_string('showsharedpresentations', 'h5plib_course_builder') . '</a></center>';
