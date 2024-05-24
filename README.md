@@ -1,8 +1,19 @@
-# Course Builder #
+<br />
+<div align="center">
+    <div class="images">
+        <a href="https://github.com/TheoRondoux/h5p-course-builder">
+            <img src="medias/img/course_builder_logo.png" alt="Logo" width="400">
+        </a>
+    </div>
+</div>
 
-TODO Describe the plugin shortly here.
+## Introduction ## 
+Course Builder is a plugin that allows Junia teachers to create content for their courses in a simplified way.
 
-TODO Provide more detailed description here.
+## Dependencies ##
+
+To work completly, this plugin needs another Moodle plugin called "[Interactive Content](https://moodle.org/plugins/mod_hvp)".
+Please install it before installing Course Builder.
 
 ## Installing via uploaded ZIP file ##
 
@@ -29,7 +40,7 @@ to complete the installation from the command line.
 
 ## License ##
 
-2024 - Théo Rondoux
+2024 - Théo Rondoux, Godfred Akwasi Boahend, Vincent Dumas, Pauline Jaspart
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
